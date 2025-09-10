@@ -1,0 +1,21 @@
+# Wofi config
+mode=drun
+term=foot
+show=drun
+prompt=run…
+allow_images=true
+matching=fuzzy
+insensitive=true
+no_actions=false
+hide_scroll=true
+line_wrap=word
+columns=1
+orientation=vertical
+normalize=true
+width=38%
+height=50%
+xoffset=0
+yoffset=0
+location=center
+layer=overlay
+

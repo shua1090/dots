@@ -1,0 +1,129 @@
+{
+  "layer": "top",
+  "height": 30,
+  "spacing": 4,
+
+  // ── Module layout ─────────────────────────────────────────────────────────────
+  "modules-left": ["sway/workspaces", "sway/mode", "sway/window"],
+  "modules-center": ["clock"],                          // BIG centered time
+  "modules-right": ["bluetooth", "pulseaudio", "network", "cpu", "memory", "temperature", "backlight", "sway/language", "battery", "tray"],
+
+  // ── Sway modules ──────────────────────────────────────────────────────────────
+  "sway/workspaces": {
+    "format": "{name}",
+    "on-click": "activate",
+    "on-scroll-up": "swaymsg workspace next",
+    "on-scroll-down": "swaymsg workspace prev"
+  },
+
+  "sway/mode": {
+    "format": "<span style=\"italic\">{}</span>"
+  },
+
+  "sway/window": {
+    "max-length": 80
+  },
+
+  "sway/scratchpad": {
+    "format": "{icon} {count}",
+    "show-empty": false,
+    "format-icons": ["", ""],
+    "tooltip": true,
+    "tooltip-format": "{app}: {title}"
+  },
+
+  // ── System tray ───────────────────────────────────────────────────────────────
+  "tray": {
+    "spacing": 10
+  },
+
+  // ── Clock (center) ────────────────────────────────────────────────────────────
+  "clock": {
+    "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+    "format-alt": "{:%Y-%m-%d}"
+  },
+
+  // ── System stats ──────────────────────────────────────────────────────────────
+  "cpu": {
+    "format": "{usage}% ",
+    "tooltip": false
+  },
+  "memory": {
+    "format": "{}% "
+  },
+  "temperature": {
+    "critical-threshold": 80,
+    "format": "{temperatureC}°C {icon}",
+    "format-icons": ["", "", ""]
+  },
+  "backlight": {
+    "format": "{percent}% {icon}",
+    "format-icons": ["", "", "", "", "", "", "", "", ""]
+  },
+
+  // ── Battery ───────────────────────────────────────────────────────────────────
+  "battery": {
+    "states": { "warning": 30, "critical": 15 },
+    "format": "{capacity}% {icon}",
+    "format-charging": "{capacity}% ",
+    "format-plugged": "{capacity}% ",
+    "format-alt": "{time} {icon}",
+    "format-icons": ["", "", "", "", ""]
+  },
+
+  // ── Network (right-click opens Wi-Fi selector) ────────────────────────────────
+  "network": {
+    "format-wifi": "{essid} ({signalStrength}%) ",
+    "format-ethernet": "{ipaddr}/{cidr} ",
+    "tooltip-format": "{ifname} via {gwaddr} ",
+    "format-linked": "{ifname} (No IP) ",
+    "format-disconnected": "Disconnected ⚠",
+    "format-alt": "{ifname}: {ipaddr}/{cidr}",
+    "on-click-right": "nm-connection-editor"          // Wi-Fi picker (requires NetworkManager)
+  },
+
+  // ── Audio ─────────────────────────────────────────────────────────────────────
+  "pulseaudio": {
+    "format": "{volume}% {icon} {format_source}",
+    "format-bluetooth": "{volume}% {icon} {format_source}",
+    "format-bluetooth-muted": " {icon} {format_source}",
+    "format-muted": " {format_source}",
+    "format-source": "{volume}% ",
+    "format-source-muted": "",
+    "format-icons": {
+      "headphone": "",
+      "hands-free": "",
+      "headset": "",
+      "phone": "",
+      "portable": "",
+      "car": "",
+      "default": ["", "", ""]
+    },
+    "on-click": "pavucontrol"
+  },
+
+  // ── Bluetooth (right-click opens manager) ─────────────────────────────────────
+  // Requires: waybar built with bluetooth module + blueman installed
+  "bluetooth": {
+    "format": "{status} ",
+    "format-connected": "{num_connections} ",
+    "format-disabled": "off ",
+    "on-click": "blueman-manager",
+    "on-click-right": "blueman-manager",
+    "tooltip-format": "{controller_alias}\n{status}\n{device_enumerate}"
+  },
+
+  // ── Other handy modules you already had ───────────────────────────────────────
+  "idle_inhibitor": {
+    "format": "{icon}",
+    "format-icons": { "activated": "", "deactivated": "" }
+  },
+
+  "keyboard-state": {
+    "numlock": true,
+    "capslock": true,
+    "format": "{name} {icon}",
+    "format-icons": { "locked": "", "unlocked": "" }
+  }
+}
+

@@ -1,0 +1,126 @@
+@import url("colors.css");
+* {
+  font-family: JetBrainsMono NerdFont,FontAwesome, Roboto, Helvetica, Arial, sans-serif;
+  font-size: 13px;
+  font-weight: bold;
+  margin: 1px;
+}
+
+window#waybar {
+  background-color: transparent;
+  color: #ffffff;
+  transition-property: background-color;
+  transition-duration: .5s;
+}
+
+window#waybar.hidden { opacity: 0.2; }
+
+button {
+  box-shadow: inset 0 -3px transparent;
+  margin-right: 2px;
+}
+
+/* Workspaces */
+#workspaces button {
+  padding: 0 5px;
+  background-color: transparent;
+  color: #ffffff;
+}
+#workspaces button:hover { background: rgba(0, 0, 0, 0.2); }
+#workspaces button.active {
+  background-color: #64727D;
+  box-shadow: inset 0 -3px #FCA5A5;
+}
+#workspaces button.urgent { background-color: #eb4d4b; }
+
+/* Shared pills */
+#clock,
+#battery,
+#cpu,
+#memory,
+#disk,
+#temperature,
+#backlight,
+#network,
+#pulseaudio,
+#wireplumber,
+#custom-media,
+#tray,
+#mode,
+#idle_inhibitor,
+#scratchpad,
+#mpd {
+  padding: 0 10px;
+  color: black;
+  border-radius: 100px;
+}
+
+#window, #workspaces { margin: 0 4px; }
+.modules-left > widget:first-child > #workspaces { margin-left: 0; }
+.modules-right > widget:last-child > #workspaces { margin-right: 0; }
+
+/* BIG centered clock */
+#clock {
+  background-color: @flamingo;
+  font-size: 18px;        /* larger time */
+  font-weight: 800;
+  padding: 0 14px;
+}
+
+/* Mode */
+#mode { background-color: #64727D; border-bottom: 3px solid #ffffff; }
+
+/* Battery */
+#battery { background-color: @green; color: #000000; }
+#battery.charging, #battery.plugged { color: #ffffff; background-color: #26A65B; }
+@keyframes blink { to { background-color: #ffffff; color: #000000; } }
+#battery.critical:not(.charging) {
+  background-color: #f53c3c; color: #ffffff;
+  animation: blink .5s linear infinite alternate;
+}
+
+/* CPU / MEM / Temp, etc. */
+#cpu { background-color: #2ecc71; color: #000000; }
+#memory { background-color: @mauve; }
+#disk { background-color: #964B00; }
+#backlight { background-color: #90b1b1; }
+#temperature { background-color: @teal; }
+#temperature.critical { background-color: #eb4d4b; }
+
+/* Network (Wi-Fi) */
+#network { background-color: @blue; }
+#network.disconnected { background-color: #f53c3c; }
+
+/* Audio */
+#pulseaudio { background-color: @peach; color: #000000; }
+#pulseaudio.muted { background-color: #90b1b1; color: #2a5c45; }
+
+/* Bluetooth (matches the pill style) */
+#bluetooth { background-color: @sapphire; }
+
+/* Tray & misc */
+#tray { background-color: #2980b9; }
+#idle_inhibitor { background-color: @base; }
+#idle_inhibitor.activated { background-color: #ecf0f1; color: #2d3436; }
+
+#language {
+  background: #00b093;
+  color: #740864;
+  padding: 0 5px;
+  margin: 0 5px;
+  min-width: 16px;
+}
+
+#keyboard-state {
+  background: #97e1ad;
+  color: #000000;
+  padding: 0 0px;
+  margin: 0 5px;
+  min-width: 16px;
+}
+#keyboard-state > label { padding: 0 5px; }
+#keyboard-state > label.locked { background: rgba(0, 0, 0, 0.2); }
+
+#scratchpad { background: rgba(0, 0, 0, 0.2); }
+#scratchpad.empty { background-color: transparent; }
+
