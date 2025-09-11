@@ -38,4 +38,7 @@ include ~/.config/sway/clipboard.conf
 # Center wofi
 include ~/.config/sway/wofi-center-sway.conf
 
+# Effects
+include ~/.config/sway/swayfx.conf
+
 include /etc/sway/config.d/*
