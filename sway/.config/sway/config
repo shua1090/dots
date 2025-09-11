@@ -10,7 +10,7 @@ set $down j
 set $up k
 set $right l
 set $term foot
-set $menu wofi
+set $menu exec sh -c 'pkill -x wofi; wofi --show drun'
 
 ### Output configuration
 output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
@@ -31,5 +31,11 @@ bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. 
 include ~/.config/sway/workspaces.conf
 include ~/.config/sway/utilities.conf
 include ~/.config/sway/layout.conf
+
+# Clipboard stuf
+include ~/.config/sway/clipboard.conf
+
+# Center wofi
+include ~/.config/sway/wofi-center-sway.conf
 
 include /etc/sway/config.d/*
