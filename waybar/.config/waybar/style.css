@@ -3,7 +3,7 @@
   font-family: JetBrainsMono NerdFont,FontAwesome, Roboto, Helvetica, Arial, sans-serif;
   font-size: 13px;
   font-weight: bold;
-  margin: 1px;
+  margin: 0px;
 }
 
 window#waybar {
@@ -11,6 +11,7 @@ window#waybar {
   color: #ffffff;
   transition-property: background-color;
   transition-duration: .5s;
+  min-height: 30px;
 }
 
 window#waybar.hidden { opacity: 0.2; }
@@ -50,7 +51,7 @@ button {
 #idle_inhibitor,
 #scratchpad,
 #mpd {
-  padding: 0 10px;
+  padding: 0 8px;
   color: black;
   border-radius: 100px;
 }
@@ -62,9 +63,9 @@ button {
 /* BIG centered clock */
 #clock {
   background-color: @flamingo;
-  font-size: 18px;        /* larger time */
+  font-size: 16px;        /* larger time */
   font-weight: 800;
-  padding: 0 14px;
+  padding: 0 10px;
 }
 
 /* Mode */
