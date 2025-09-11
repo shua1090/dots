@@ -125,3 +125,39 @@ button {
 #scratchpad { background: rgba(0, 0, 0, 0.2); }
 #scratchpad.empty { background-color: transparent; }
 
+
+
+/* Highlight current workspace */
+#workspaces button {
+  border-radius: 12px;
+  padding: 0 8px;
+  margin: 0 2px;
+}
+#workspaces button.focused, #workspaces button.active {
+  background: var(--accent, #5e81ac);
+  color: var(--on-accent, #ffffff);
+}
+#workspaces button.urgent {
+  background: var(--warn, #bf616a);
+  color: #ffffff;
+}
+
+/* Scratchpad indicator shows only when non-empty */
+#scratchpad:not(.empty) {
+  background: rgba(255,255,255,0.08);
+  border-radius: 10px;
+  padding: 0 8px;
+  margin: 0 6px;
+  font-weight: 600;
+}
+
+/* Bigger, wider center clock without increasing bar height */
+#clock {
+  font-size: 17px;
+  font-weight: 700;
+  padding: 0 18px;
+  letter-spacing: 0.3px;
+  min-width: 220px; /* keeps it visually centered/wide */
+  line-height: 30px; /* match your bar height */
+  text-align: center;
+}

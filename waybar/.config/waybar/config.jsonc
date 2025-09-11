@@ -4,7 +4,7 @@
   "spacing": 4,
 
   // ── Module layout ─────────────────────────────────────────────────────────────
-  "modules-left": ["sway/workspaces", "sway/mode", "sway/window"],
+  "modules-left": ["sway/workspaces", "sway/scratchpad", "sway/mode", "sway/window"],
   "modules-center": ["clock"],                          // BIG centered time
   "modules-right": ["bluetooth", "pulseaudio", "network", "cpu", "memory", "temperature", "backlight", "sway/language", "battery", "tray"],
 
@@ -39,6 +39,7 @@
 
   // ── Clock (center) ────────────────────────────────────────────────────────────
   "clock": {
+    "format": "{:%a %b %d  %I:%M %p}",
     "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
     "format-alt": "{:%Y-%m-%d}"
   },
