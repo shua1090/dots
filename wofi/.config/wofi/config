@@ -1,21 +1,25 @@
-# Wofi config
+# ~/.config/wofi/config
+# Centered, single-monitor launcher with fuzzy matching
+
 mode=drun
-term=foot
-show=drun
-prompt=run…
-allow_images=true
 matching=fuzzy
+allow-images=true
+no-actions=true
 insensitive=true
-no_actions=false
-hide_scroll=true
-line_wrap=word
-columns=1
-orientation=vertical
-normalize=true
-width=38%
-height=50%
+# Use your terminal
+term=foot
+# Prompt text
+prompt=Search…
+
+# Positioning
+location=center
 xoffset=0
 yoffset=0
-location=center
-layer=overlay
+width=800
+height=420
 
+# Behavior
+hide-scroll=true
+dpi-aware=true
+columns=1
+show=drun

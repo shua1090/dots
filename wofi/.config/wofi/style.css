@@ -1,5 +1,4 @@
-/* Catppuccin-esque (matches your colors.css palette) */
-
+/* Wofi style (GTK CSS) */
 @define-color rosewater #f4dbd6;
 @define-color flamingo  #f0c6c6;
 @define-color pink      #f5bde6;
@@ -106,4 +105,3 @@ window {
   padding: 4px 8px;
   margin: 8px 6px 12px 6px;
 }
-
