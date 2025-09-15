@@ -1,0 +1,65 @@
+/* GTK-safe wlogout styling (no transform/display/box-shadow/animation) */
+@import url("../wofi/colors.css");
+
+window {
+  background-color: alpha(@mantle, 0.86);
+  color: @text;
+  font-family: JetBrainsMono Nerd Font, Inter, Cantarell, sans-serif;
+  font-size: 22pt;
+}
+
+/* Base button */
+button {
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 22%;
+  color: @text;
+  border: 2px solid transparent;
+  border-radius: 28px;
+  padding: 24px;
+  margin: 18px;
+}
+
+/* Label under icon (wlogout uses a label child if "text" in layout) */
+button span {
+  margin-top: 16px;
+  font-size: 12pt;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  color: @subtext1;
+}
+
+/* Hover/active states with simple color changes (GTK-safe) */
+button:hover {
+  background-color: alpha(@surface0, 0.35);
+  border-color: alpha(@blue, 0.35);
+}
+button:active {
+  background-color: alpha(@surface0, 0.55);
+  border-color: alpha(@blue, 0.55);
+}
+
+/* Accent per action on hover */
+#lock:hover       { border-color: alpha(@sapphire, .7); }
+#logout:hover     { border-color: alpha(@peach, .7); }
+#suspend:hover    { border-color: alpha(@sky, .7); }
+#shutdown:hover   { border-color: alpha(@red, .7); }
+#reboot:hover     { border-color: alpha(@mauve, .7); }
+#hibernate:hover  { border-color: alpha(@teal, .7); }
+
+/* Icon bindings (paths relative to ~/.config/wlogout/) */
+#logout   { background-image: image(url("./icons/logout.png")); }
+#logout:hover { background-image: image(url("./icons/logout-hover.png")); }
+
+#suspend  { background-image: image(url("./icons/sleep.png")); }
+#suspend:hover { background-image: image(url("./icons/sleep-hover.png")); }
+
+#shutdown { background-image: image(url("./icons/power.png")); }
+#shutdown:hover { background-image: image(url("./icons/power-hover.png")); }
+
+#reboot   { background-image: image(url("./icons/restart.png")); }
+#reboot:hover { background-image: image(url("./icons/restart-hover.png")); }
+
+#hibernate { background-image: image(url("./icons/hibernate.png")); }
+#hibernate:hover { background-image: image(url("./icons/hibernate-hover.png")); }

@@ -1,0 +1,62 @@
+@define-color rosewater #f4dbd6;
+@define-color flamingo  #f0c6c6;
+@define-color pink      #f5bde6;
+@define-color mauve     #c6a0f6;
+@define-color red       #ed8796;
+@define-color peach     #f5a97f;
+@define-color yellow    #eed49f;
+@define-color green     #a6da95;
+@define-color teal      #8bd5ca;
+@define-color sky       #91d7e3;
+@define-color sapphire  #7dc4e4;
+@define-color blue      #8aadf4;
+@define-color lavender  #b7bdf8;
+@define-color text      #cad3f5;
+@define-color subtext1  #b8c0e0;
+@define-color surface2  #5b6078;
+@define-color surface1  #494d64;
+@define-color surface0  #363a4f;
+@define-color base      #24273a;
+@define-color mantle    #1e2030;
+@define-color crust     #181926;
+
+* { font-family: JetBrainsMono Nerd Font, Inter, Cantarell, sans-serif; }
+
+.control-center {
+  background-color: alpha(@mantle, 0.96);
+  border: 2px solid @surface1;
+  border-radius: 16px;
+  padding: 8px;
+}
+
+.widget-title { color: @text; background: transparent; margin: 4px 6px 8px 6px; }
+.widget-title > * { font-weight: 800; font-size: 16px; }
+
+.buttons-grid > button {
+  background: @surface0; color: @text;
+  border: 1px solid @surface2; border-radius: 12px;
+  padding: 8px 10px; margin: 6px;
+}
+.buttons-grid > button:hover { background: @surface1; }
+.buttons-grid > button:checked { background: @blue; color: @crust; border-color: @blue; }
+
+.widget-dnd { background: transparent; color: @text; margin: 0 6px 4px 6px; }
+
+.notification-row {
+  background: @base; color: @text; border-radius: 12px;
+  border: 1px solid @surface2; margin: 6px; padding: 8px;
+}
+.notification-row:hover { background: @surface0; }
+.notification-row.critical { border-color: @red; }
+
+.widget-mpris {
+  background: @base; border-radius: 12px; border: 1px solid @surface2;
+  margin: 6px; padding: 8px;
+}
+
+.notification-window {
+  background: alpha(@mantle, 0.96);
+  border-radius: 14px;
+  border: 2px solid @surface1;
+  padding: 6px;
+}

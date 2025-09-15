@@ -10,10 +10,10 @@ set $down j
 set $up k
 set $right l
 set $term foot
-set $menu exec sh -c 'pkill -x wofi; wofi --show drun'
+set $menu exec sh -c 'pkill -x wofi; ~/.config/wofi/wofi-run.sh'
 
 ### Output configuration
-output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
+# output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
 output eDP-1 resolution 3840x2400 scale 2 position 0,0
 
 ### Autostart
@@ -26,6 +26,9 @@ bindsym $mod+d exec $menu
 floating_modifier $mod normal
 bindsym $mod+Shift+c reload
 bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
+
+# Auth
+exec_always /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 
 ### Includes
 include ~/.config/sway/workspaces.conf
@@ -41,4 +44,14 @@ include ~/.config/sway/wofi-center-sway.conf
 # Effects
 include ~/.config/sway/swayfx.conf
 
+# Notificatoins
+include ~/.config/sway/swaync-bindings.conf
+
+# Logout
+bindsym $mod+p exec wlogout 
+
+# Wallpapers
+include ~/.config/sway/wallpaper.conf
+
 include /etc/sway/config.d/*
+
