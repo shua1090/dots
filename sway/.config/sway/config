@@ -55,3 +55,11 @@ include ~/.config/sway/wallpaper.conf
 
 include /etc/sway/config.d/*
 
+# MOVE:
+
+# ~/.config/sway/config
+exec_always {
+    export ELECTRON_OZONE_PLATFORM_HINT=wayland
+    export OZONE_PLATFORM=wayland
+}
+
