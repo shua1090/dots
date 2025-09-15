@@ -22,7 +22,10 @@
           brave
           vscode       # Microsoft build
           code-cursor  # if available in nixpkgs; else swap/remove
+
+          
           starship
+          blesh
         ];
       };
     });
