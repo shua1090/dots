@@ -55,6 +55,9 @@ include ~/.config/sway/wallpaper.conf
 
 include /etc/sway/config.d/*
 
+# Defaults (usually apps) etc
+include ~/.config/sway/defaults.conf
+
 # MOVE:
 
 # ~/.config/sway/config
