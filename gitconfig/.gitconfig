@@ -1,0 +1,25 @@
+[alias]
+        su = ! git submodule sync --recursive && git submodule  update --init --recursive
+[user]
+        email = shynn.lawrence@gmail.com
+        name = Shynn Lawrence
+[filter "lfs"]
+        process = git-lfs filter-process
+        required = true
+        clean = git-lfs clean -- %f
+        smudge = git-lfs smudge -- %f
+[rerere]
+        enabled = true
+[alias]
+    # Difftastic aliases, so `git dlog` is `git log` with difftastic and so on.
+    dlog = -c diff.external=difft log --ext-diff
+    dshow = -c diff.external=difft show --ext-diff
+    ddiff = -c diff.external=difft diff
+
+
+[submodule]
+        recurse = true
+        fetchJobs = 0
+[fetch]
+        recurseSubmodules = on-demand
+        parallel = 0
