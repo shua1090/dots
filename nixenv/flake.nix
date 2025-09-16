@@ -1,7 +1,7 @@
 {
   description = "Simple workstation flake with apps and a Rust devshell";
 
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
   outputs = { self, nixpkgs }: let
     systems = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
@@ -18,14 +18,22 @@
       workstation = pkgs.buildEnv {
         name = "workstation";
         paths = with pkgs; [
-          vim
           brave
+
+	  # Code Editors
           vscode       # Microsoft build
           code-cursor  # if available in nixpkgs; else swap/remove
+          vim
 
-          
+          # Shell stuff 
           starship
           blesh
+
+	  # Audio/Music
+	  spotify
+
+	  # Communication
+	  slack
         ];
       };
     });
