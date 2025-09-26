@@ -20,20 +20,42 @@
         paths = with pkgs; [
           brave
 
-	  # Code Editors
+	        # Code Editors
           vscode       # Microsoft build
           code-cursor  # if available in nixpkgs; else swap/remove
           vim
+
+          # Dev stuff
+          clang-tools
 
           # Shell stuff 
           starship
           blesh
 
-	  # Audio/Music
-	  spotify
+          # Audio/Music
+          spotify
 
-	  # Communication
-	  slack
+          # Communication
+          slack
+          whatsapp-electron
+
+          # Screenshot stuff
+          grim
+          slurp
+
+	  # PDF Viewer
+
+
+
+
+          # Dev Tools
+            rustc
+            cargo
+            rustfmt
+            clippy
+
+            nodejs
+	    platformio
         ];
       };
     });

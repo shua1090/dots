@@ -28,7 +28,7 @@ bindsym $mod+Shift+c reload
 bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
 
 # Auth
-exec_always /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
+exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 
 ### Includes
 include ~/.config/sway/workspaces.conf
@@ -53,16 +53,21 @@ bindsym $mod+p exec wlogout
 # Wallpapers
 include ~/.config/sway/wallpaper.conf
 
-include /etc/sway/config.d/*
+# Screenshots
+include ~/.config/sway/screenshot.conf
 
 # Defaults (usually apps) etc
 include ~/.config/sway/defaults.conf
 
+include /etc/sway/config.d/*
+
+# monitors
+include ~/.config/sway/monitors.conf
+
 # MOVE:
 
 # ~/.config/sway/config
-exec_always {
+exec {
     export ELECTRON_OZONE_PLATFORM_HINT=wayland
     export OZONE_PLATFORM=wayland
 }
-

@@ -1,4 +1,13 @@
 #!/usr/bin/env bash
+
+# --- Workaround: Exit if system uptime is greater than 2 minutes ---
+# This prevents the script from running during mid-session monitor hot-plugging.
+UPTIME_SECONDS=$(cut -d'.' -f1 /proc/uptime)
+if (( UPTIME_SECONDS > 120 )); then
+    exit 0
+fi
+# --- End of Workaround ---
+
 set -euo pipefail
 
 # Usage:
@@ -15,11 +24,11 @@ DIR="${HOME}/.config/wallpapers"
 [[ -d "$DIR" ]] || { echo "Wallpapers dir not found: $DIR"; exit 1; }
 
 # Ensure swww is available
-command -v swww >/dev/null 2>&1 || { echo "swww not found in PATH"; exit 1; }
+command -v /usr/bin/swww >/dev/null 2>&1 || { echo "swww not found in PATH"; exit 1; }
 
-# Start swww daemon if not running
-if ! pgrep -x swww-daemon >/dev/null 2>&1; then
-  swww init
+# If swww is already running
+if pgrep -x "swww" >/dev/null; then
+  echo "swww is already running."
 fi
 
 # Collect images via bash globbing (case-insensitive)
@@ -70,7 +79,7 @@ echo "Applying: $IMG"
 echo "Transition: $TTYPE"
 
 # Apply with a smooth, sane default
-swww img "$IMG" \
+/usr/bin/swww img "$IMG" \
   --transition-type "$TTYPE" \
   --transition-fps 120 \
   --transition-step 120 \
