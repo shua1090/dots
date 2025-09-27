@@ -1,0 +1,85 @@
+{
+    "C_Cpp.default.compilerPath": "/usr/bin/clang++",
+    "vim.insertModeKeyBindings": [
+        {
+            "before": [
+                "j",
+                "j"
+            ],
+            "after": [
+                "<esc>"
+            ]
+        }
+    ],
+    "files.autoSave": "afterDelay",
+    "editor.fontSize": 16,
+    "git.openRepositoryInParentFolders": "never",
+    "[rust]": {
+        "editor.defaultFormatter": "rust-lang.rust-analyzer"
+    },
+    "editor.formatOnSave": true,
+    "terminal.integrated.fontFamily": "MesloLGS NF",
+    "security.workspace.trust.untrustedFiles": "open",
+    "diffEditor.ignoreTrimWhitespace": true,
+    "cmake.showOptionsMovedNotification": false,
+    "cmake.pinnedCommands": [
+        "workbench.action.tasks.configureTaskRunner",
+        "workbench.action.tasks.runTask"
+    ],
+    "cmake.showConfigureWithDebuggerNotification": false,
+    "workbench.iconTheme": "a-file-icon-vscode",
+    "editor.inlineSuggest.showToolbar": "always",
+    "editor.renderWhitespace": "all",
+    "platformio-ide.customPATH": "/Users/shynn/Downloads/astyle/build/mac/bin:/Users/shynn/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/Users/shynn/Downloads/astyle/build/mac/bin:/Users/shynn/bin:/Users/shynn/.cargo/bin",
+    "platformio-ide.useBuiltinPython": false,
+    "platformio-ide.useBuiltinPIOCore": false,
+    "idf.espIdfPath": "/Users/shynn/esp/v5.3.1/esp-idf",
+    "idf.pythonBinPath": "/Users/shynn/.espressif/python_env/idf5.3_py3.12_env/bin/python",
+    "idf.toolsPath": "/Users/shynn/.espressif",
+    "idf.customExtraPaths": "/Users/shynn/.espressif/tools/xtensa-esp-elf-gdb/14.2_20240403/xtensa-esp-elf-gdb/bin:/Users/shynn/.espressif/tools/riscv32-esp-elf-gdb/14.2_20240403/riscv32-esp-elf-gdb/bin:/Users/shynn/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20240530/xtensa-esp-elf/bin:/Users/shynn/.espressif/tools/riscv32-esp-elf/esp-13.2.0_20240530/riscv32-esp-elf/bin:/Users/shynn/.espressif/tools/esp32ulp-elf/2.38_20240113/esp32ulp-elf/bin:/Users/shynn/.espressif/tools/cmake/3.24.0/CMake.app/Contents/bin:/Users/shynn/.espressif/tools/openocd-esp32/v0.12.0-esp32-20240318/openocd-esp32/bin:/Users/shynn/.espressif/tools/ninja/1.11.1:/Users/shynn/.espressif/tools/esp-rom-elfs/20240305",
+    "idf.customExtraVars": {
+        "OPENOCD_SCRIPTS": "/Users/shynn/.espressif/tools/openocd-esp32/v0.12.0-esp32-20240318/openocd-esp32/share/openocd/scripts",
+        "ESP_ROM_ELF_DIR": "/Users/shynn/.espressif/tools/esp-rom-elfs/20240305/"
+    },
+    "idf.gitPath": "git",
+    "extensions.experimental.affinity": {
+        "asvetliakov.vscode-neovim": 1
+    },
+    "nvim-ui.nvimColorCustomizationKeys": [
+        "tab.activeBorder",
+        "editorCursor.foreground"
+    ],
+    "vscode-neovim.neovimInitPath": "~/.config/nvim/init.vim",
+    "vscode-neovim.compositeKeys": {
+        "jj": {
+            "command": "vscode-neovim.escape"
+        }
+    },
+    "python.defaultInterpreterPath": "/Users/shynn/Downloads/.venv",
+    "githubPullRequests.pullBranch": "never",
+    "workbench.editorAssociations": {
+        "*.copilotmd": "vscode.markdown.preview.editor",
+        "*.cpp": "default"
+    },
+    "accessibility.signals.terminalBell": {
+        "sound": "on"
+    },
+    "terminal.integrated.enableVisualBell": true,
+    "[c]": {
+        "editor.defaultFormatter": "ms-vscode.cpptools"
+    },
+    "workbench.settings.applyToAllProfiles": [],
+    "relative-line-endings": 10,
+    "github.copilot.advanced": {},
+    "cmake.configureEnvironment": {
+        "CMAKE_PREFIX_PATH": "${workspaceFolder}/.venv",
+        "Python_ROOT_DIR": "${workspaceFolder}/.venv/bin/"
+    },
+    "cmake.touchbar.advanced": {},
+    "githubPullRequests.experimental.chat": true,
+    "githubPullRequests.experimental.notificationsView": true,
+    "githubPullRequests.showPullRequestNumberInTree": true,
+    "github.copilot.nextEditSuggestions.enabled": true,
+    "cursor.composer.shouldChimeAfterChatFinishes": true,
+    "cmake.cmakePath": "/usr/local/bin/cmake"
+}
