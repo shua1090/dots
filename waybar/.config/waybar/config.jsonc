@@ -4,32 +4,32 @@
   "spacing": 4,
 
   // ── Module layout ─────────────────────────────────────────────────────────────
-  "modules-left": ["sway/workspaces", "sway/scratchpad", "sway/mode", "sway/window"],
-  "modules-center": ["clock"],                          // BIG centered time
-  "modules-right": ["bluetooth", "pulseaudio", "network", "cpu", "memory", "temperature", "backlight", "sway/language", "battery", "tray"],
+  "modules-left": ["hyprland/workspaces", "hyprland/window"],
+  "modules-center": ["clock", "idle_inhibitor"],
+  "modules-right": ["bluetooth", "pulseaudio", "network", "cpu", "memory", "temperature", "backlight", "battery", "tray"],
 
-  // ── Sway modules ──────────────────────────────────────────────────────────────
-  "sway/workspaces": {
-    "format": "{name}",
+  // ── Hyprland modules ──────────────────────────────────────────────────────────
+  "hyprland/workspaces": {
+    "format": "{icon}",
     "on-click": "activate",
-    "on-scroll-up": "swaymsg workspace next",
-    "on-scroll-down": "swaymsg workspace prev"
+    "on-scroll-up": "hyprctl dispatch workspace +1",
+    "on-scroll-down": "hyprctl dispatch workspace -1",
+    "format-icons": {
+      "1": "1",
+      "2": "2",
+      "3": "3",
+      "4": "4",
+      "5": "5",
+      "6": "6",
+      "7": "7",
+      "8": "8",
+      "9": "9",
+      "10": "10"
+    }
   },
 
-  "sway/mode": {
-    "format": "<span style=\"italic\">{}</span>"
-  },
-
-  "sway/window": {
+  "hyprland/window": {
     "max-length": 80
-  },
-
-  "sway/scratchpad": {
-    "format": "{icon} {count}",
-    "show-empty": false,
-    "format-icons": ["", ""],
-    "tooltip": true,
-    "tooltip-format": "{app}: {title}"
   },
 
   // ── System tray ───────────────────────────────────────────────────────────────
@@ -72,7 +72,7 @@
     "format-icons": ["", "", "", "", ""]
   },
 
-  // ── Network (right-click opens Wi-Fi selector) ────────────────────────────────
+  // ── Network ───────────────────────────────────────────────────────────────────
   "network": {
     "format-wifi": "{essid} ({signalStrength}%) ",
     "format-ethernet": "{ipaddr}/{cidr} ",
@@ -80,7 +80,7 @@
     "format-linked": "{ifname} (No IP) ",
     "format-disconnected": "Disconnected ⚠",
     "format-alt": "{ifname}: {ipaddr}/{cidr}",
-    "on-click-right": "nm-connection-editor"          // Wi-Fi picker (requires NetworkManager)
+    "on-click-right": "nm-connection-editor"
   },
 
   // ── Audio ─────────────────────────────────────────────────────────────────────
@@ -103,8 +103,7 @@
     "on-click": "pavucontrol"
   },
 
-  // ── Bluetooth (right-click opens manager) ─────────────────────────────────────
-  // Requires: waybar built with bluetooth module + blueman installed
+  // ── Bluetooth ─────────────────────────────────────────────────────────────────
   "bluetooth": {
     "format": "{status} ",
     "format-connected": "{num_connections} ",
@@ -114,12 +113,11 @@
     "tooltip-format": "{controller_alias}\n{status}\n{device_enumerate}"
   },
 
-  // ── Other handy modules you already had ───────────────────────────────────────
+  // ── Optional Modules (uncomment to use) ───────────────────────────────────────
   "idle_inhibitor": {
     "format": "{icon}",
     "format-icons": { "activated": "", "deactivated": "" }
   },
-
   "keyboard-state": {
     "numlock": true,
     "capslock": true,
@@ -127,4 +125,3 @@
     "format-icons": { "locked": "", "unlocked": "" }
   }
 }
-
