@@ -1,188 +1,248 @@
-# Starship Prompt — hacker-dark-but-cheery v3 (flashier)
-# Drop at: ~/.config/starship.toml
-"$schema" = "https://starship.rs/config-schema.json"
-
-# ----------------------------------------------------------------------------
-# Layout: colorful powerline on LEFT, compact INFO banner on RIGHT
-# ----------------------------------------------------------------------------
-format = "[](fg:surface2)$os$username$hostname$directory$git_branch$git_status$python$nodejs$rust$golang$java$docker_context$kubernetes$terraform$nix_shell$package$line_break$character"
-right_format = """$all"""
-#right_format = "[](fg:surface2)$info_banner[](fg:surface2)"
+# ----- Global ---------------------------------------------------------------
+# Two-line prompt like p10k: info on line 1, prompt char on line 2.
 add_newline = true
-palette = "user_dark"
+command_timeout = 1200
+scan_timeout = 50
+# Use a palette so we can tweak colors once.
+palette = "p10kish"
 
-# Compose a flashy right-side info banner using time/status/jobs/memory
-# We emulate a mini powerline bar by giving each module a bg and chaining them.
-[custom.info_banner]
-description = "Right-side info banner"
-when = "true"
-command = "echo"
-format = "[ ](bg:surface2)"
+# Left prompt (line 1), then newline + prompt char (line 2).
+format = """
+$os$container$hostname$username\
+$directory\
+$git_branch$git_status\
+$kubernetes$docker_context\
+$python$conda$nodejs$rust$golang$java$dotnet\
+$aws$gcloud$terraform$nix_shell$package\
+$line_break\
+$character"""
 
-# --- Right-side modules used in $info_banner ---------------------------------
-[time]
-disabled = false
-use_12hr = false
-format = "[](fg:mantle)[  $time ](fg:text bg:mantle)[](fg:mantle bg:surface1)"
-style = "fg:text bg:mantle"
-time_format = "%H:%M:%S"
+# Right prompt (line 1 right side): clock, long-running cmd duration, background jobs, battery if low.
+right_format = "$jobs$cmd_duration$time$battery"
 
-[cmd_duration]
-min_time = 250
-format = "[ ⏱ $duration ](fg:subtext0 bg:surface1)[](fg:surface1 bg:surface0)"
-show_milliseconds = true
+# Compact continuation for wrapped commands.
+continuation_prompt = "  … "
 
-[status]
-disabled = false
-symbol = "✖"
-format = "[ $symbol $status ](bold fg:red bg:surface0)[](fg:surface0 bg:base)"
-map_symbol = true
+# ----- Styles / Palette -----------------------------------------------------
+[palettes.p10kish]
+fg = "white"
+dim = "bright-black"
+accent = "cyan"
+ok = "green"
+warn = "yellow"
+err = "red"
+violet = "purple"
+blue = "blue"
+hint = "bright-black"
 
-[memory_usage]
-disabled = false
-threshold = -1
-format = "[  $ram( | $swap) ](fg:sky bg:base)"
-
-# ----------------------------------------------------------------------------
-# Core prompt parts (LEFT)
-# ----------------------------------------------------------------------------
+# ----- Prompt Character & Modes --------------------------------------------
 [character]
-success_symbol = "[❯](bold fg:teal)"
-error_symbol   = "[❯](bold fg:red)"
-vimcmd_symbol  = "[❮](bold fg:green)"
+success_symbol = "[❯](bold ok)"
+error_symbol   = "[❯](bold err)"
+vicmd_symbol   = "[❮](bold accent)"
 format = "$symbol "
 
-[os]
+# Show a subtle marker if you’re root or via sudo.
+[status]
+style = "bold err"
+symbol = "✘ "
+success_symbol = ""
+format = "[$symbol$status]($style) "
+map_symbol = true
 disabled = false
-style = "fg:crust bg:surface2"
-format = "[  ]($style)[](fg:surface2 bg:surface1)"
 
-[username]
-show_always = true
-format = "[ $user ](fg:crust bg:surface1)[](fg:surface1 bg:surface0)"
-style_user = "fg:crust bg:surface1"
-style_root = "fg:crust bg:red"
-
-[hostname]
-ssh_only = false
-format = "[ $hostname ](fg:text bg:surface0)[](fg:surface0 bg:base)"
-
-[directory]
-style = "bold fg:text bg:base"
-format = "[  $path ]($style)"
-truncation_length = 3
-truncation_symbol = "…/"
-truncate_to_repo = true
-read_only = " 󰌾"
-read_only_style = "fg:yellow"
-
-# --- Git (more verbose & human-readable) -------------------------------------
-[git_branch]
-# Powerline branch glyph for wide NF coverage.
-symbol = ""
-format = "[](fg:base bg:surface2)[ $symbol $branch ](fg:text bg:surface2)"
-only_attached = false
-
-[git_status]
-# Replace cryptic icons with labeled counters
-# Example output: "+2 staged ~1 mod ?3 untracked ↑1 ↓0"
-format = "[ $staged$modified$renamed$deleted$untracked$stashed$conflicted$ahead_behind ](fg:sapphire bg:surface2)[](fg:surface2)"
-style = "fg:sapphire bg:surface2"
-# Per-counter strings (with labels)
-conflicted = "conflict:${count} "
-ahead = "↑${count} "
-behind = "↓${count} "
-diverged = "↑${ahead_count}↓${behind_count} "
-untracked = "?${count} untracked "
-stashed = "stash:${count} "
-modified = "~${count} mod "
-staged = "+${count} staged "
-renamed = "> ${count} ren "
-deleted = "✖${count} del "
-
-# --- Runtimes -----------------------------------------------------------------
-[python]
-format = "[](fg:mantle)[ venv:$virtualenv( $version) ](fg:crust bg:mantle)[](fg:mantle)"
-version_format = "v${major}.${minor}.${patch}"
-python_binary = ["python", "python3"]
-
-[nodejs]
-format = "[ node $version ](fg:green)"
-
-[rust]
-format = "[ rs $version ](fg:peach)"
-
-[golang]
-format = "[ go $version ](fg:sky)"
-
-[java]
-format = "[ java $version ](fg:mauve)"
-
-[docker_context]
-format = "[ docker $context ](fg:blue)"
-only_with_files = true
-
-[kubernetes]
+[sudo]
+style = "bold warn"
+symbol = "⚡ "
 disabled = false
-format = "[ k8s $context(::$namespace) ](fg:teal)"
-
-[terraform]
-format = "[ tf $version ](fg:lavender)"
-
-[nix_shell]
-format = "[ nix $state( $name) ](fg:sapphire)"
-
-[package]
-format = "[ pkg $version ](fg:yellow)"
-display_private = true
-
-[direnv]
-format = "[ direnv ](fg:overlay1)"
-
-[aws]
-format = "[ aws $profile ](fg:overlay1)"
-
-[gcloud]
-format = "[ gcp $account ](fg:overlay1)"
+format = "[$symbol]($style) "
 
 [jobs]
-format = "[⚙ $number](fg:peach)"
+symbol = "✦ "
+style = "bold accent"
+threshold = 1
+format = "[$symbol$number]($style) "
 
-[shell]
+# ----- Time & Duration ------------------------------------------------------
+[cmd_duration]
+min_time = 2000
+format = "took [$duration]($style) "
+style = "dim"
+
+[time]
 disabled = false
-fish_indicator = "fish"
-bash_indicator = "bash"
-zsh_indicator  = "zsh"
-format = "[$indicator](fg:overlay2) "
+time_format = "%H:%M"
+format = "[$time]($style) "
+style = "dim"
 
 [battery]
+disabled = false
+full_symbol = " "
+charging_symbol = " "
+discharging_symbol = " "
+unknown_symbol = " "
+format = "[$symbol$percentage]($style) "
+[[battery.display]]
+threshold = 25
+style = "bold warn"
+
+# ----- Identity & Context ---------------------------------------------------
+[os]
+disabled = false
+format = "[$symbol]($style) "
+style = "dim"
+# Feel free to trim this to the OSes you use.
+[os.symbols]
+Macos = " "
+Linux = " "
+Windows = " "
+
+[username]
+style_user = "bold fg"
+style_root = "bold err"
+format = "[$user]($style)"
+show_always = false
+
+[hostname]
+ssh_only = true
+format = "[@$hostname]($style) "
+style = "dim"
+
+[container]
+format = "[$symbol $name]($style) "
+symbol = "🍱"
+style = "dim"
+disabled = false
+
+# ----- Location -------------------------------------------------------------
+[directory]
+style = "bold accent"
+truncation_length = 3
+truncate_to_repo = true
+read_only = ""
+read_only_style = "dim"
+fish_style_pwd_dir_length = 1
+format = "[$path]($style)[$read_only]($read_only_style) "
+
+# ----- Git ------------------------------------------------------------------
+[git_branch]
+symbol = " "
+style = "bold violet"
+format = "on [$symbol$branch]($style) "
+
+[git_status]
+style = "bold err"
+format = "([$all_status$ahead_behind]($style) )"
+# Tweak symbols to be compact but expressive.
+conflicted = "⚠"
+ahead = "⇡${count}"
+behind = "⇣${count}"
+diverged = "⇕⇡${ahead_count}⇣${behind_count}"
+stashed = "✭"
+staged = "+${count}"
+modified = "~${count}"
+renamed = "»${count}"
+deleted = "✗${count}"
+untracked = "?${count}"
+
+# ----- Runtimes / Toolchains -----------------------------------------------
+[python]
+symbol = " "
+style = "bold blue"
+# Show venv/pyenv + version when relevant; quiet otherwise.
+format = 'via [${symbol}${pyenv_prefix}${version} (${virtualenv})]($style) '
+pyenv_version_name = true
+detect_extensions = ["py", "ipynb"]
+detect_files = ["pyproject.toml", "requirements.txt", ".python-version", "Pipfile", "poetry.lock"]
+python_binary = "python3"
+
+[conda]
+symbol = "🧪 "
+style = "bold blue"
+format = "via [$symbol$environment]($style) "
+
+[nodejs]
+symbol = " "
+style = "bold green"
+format = "via [$symbol$version]($style) "
+detect_files = ["package.json", "pnpm-lock.yaml", "yarn.lock", "bun.lockb"]
+
+[rust]
+symbol = " "
+style = "bold red"
+format = "via [$symbol$version]($style) "
+
+[golang]
+symbol = " "
+style = "bold cyan"
+format = "via [$symbol$version]($style) "
+
+[java]
+symbol = " "
+style = "bold red"
+format = "via [$symbol$version]($style) "
+
+[dotnet]
+symbol = ".NET "
+style = "bold purple"
+format = "via [$symbol($version)]($style) "
+
+[package]
+symbol = "󰏗 "
+style = "dim"
+format = "is [$symbol$version]($style) "
+display_private = true
+
+# ----- Cloud / DevOps -------------------------------------------------------
+[aws]
+symbol = " "
+style = "bold warn"
+format = "with [$symbol($profile)(@$region)]($style) "
+expiration_symbol = "⏳"
+
+[gcloud]
+symbol = "󱇶 "
+style = "bold warn"
+format = "with [$symbol$account(@$region)]($style) "
+
+[kubernetes]
+symbol = "☸ "
+format = "[$symbol$context(::$namespace)](bold blue) "
+disabled = false
+detect_files = ["kubernetes.yaml", "k8s.yaml", "helmfile.yaml", "Chart.yaml"]
+# Optional: shorten noisy managed contexts.
+contexts = [
+  { context_pattern = "gke_.*_(?P<cluster>[\\w-]+)", context_alias = "gke:$cluster" },
+  { context_pattern = "arn:aws:eks:.*:cluster/(?P<cluster>[\\w-]+)", context_alias = "eks:$cluster" }
+]
+
+[docker_context]
+symbol = " "
+style = "bold cyan"
+format = "via [$symbol$context]($style) "
+
+[terraform]
+symbol = "󱁢 "
+style = "bold violet"
+format = "via [$symbol$workspace]($style) "
+
+[nix_shell]
+symbol = " "
+style = "bold blue"
+format = "via [$symbol$state( $name)]($style) "
+
+# ----- Misc / Nice-to-haves -------------------------------------------------
+[cmd_guard]  # (custom idea placeholder; starship ignores unknown tables)
+# This is just a comment hint: consider adding a shell alias guard or safe-rm.
+
+# Show the active shell only when it’s not your default.
+[shell]
 disabled = true
 
-# --- Palette (Catppuccin Mocha-ish) ------------------------------------------
-[palettes.user_dark]
-rosewater = "#f4dbd6"
-flamingo  = "#f0c6c6"
-pink      = "#f5bde6"
-mauve     = "#c6a0f6"
-red       = "#ed8796"
-maroon    = "#ee99a0"
-peach     = "#f5a97f"
-yellow    = "#eed49f"
-green     = "#a6da95"
-teal      = "#8bd5ca"
-sky       = "#91d7e3"
-sapphire  = "#7dc4e4"
-blue      = "#8aadf4"
-lavender  = "#b7bdf8"
-text      = "#cad3f5"
-subtext1  = "#b8c0e0"
-subtext0  = "#a5adcb"
-overlay2  = "#939ab7"
-overlay1  = "#8087a2"
-overlay0  = "#6e738d"
-surface2  = "#5b6078"
-surface1  = "#494d64"
-surface0  = "#363a4f"
-base      = "#24273a"
-mantle    = "#1e2030"
-crust     = "#181926"
+# Keep prompt tight on empty envs.
+[env_var]
+# Example: surface a PROJECT env var if set.
+variable = "PROJECT"
+format = "[$env_value]($style) "
+style = "bold accent"
+disabled = true
