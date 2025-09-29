@@ -5,4 +5,6 @@
 
 stow -t ~ gitconfig vimrc waybar
 stow -t ~/.config/hypr hypr
-stow -t ~ wofi
+stow -t ~ wofi wlogout wallpapers swaync
+
+cp dbox.sh ~/bin/dbox
