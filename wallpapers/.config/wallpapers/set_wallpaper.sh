@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
-# --- Workaround: Exit if system uptime is greater than 2 minutes ---
-# This prevents the script from running during mid-session monitor hot-plugging.
-UPTIME_SECONDS=$(cut -d'.' -f1 /proc/uptime)
-if (( UPTIME_SECONDS > 120 )); then
-    exit 0
-fi
+# # --- Workaround: Exit if system uptime is greater than 2 minutes ---
+# # This prevents the script from running during mid-session monitor hot-plugging.
+# UPTIME_SECONDS=$(cut -d'.' -f1 /proc/uptime)
+# if (( UPTIME_SECONDS > 120 )); then
+#     exit 0
+# fi
 # --- End of Workaround ---
 
 set -euo pipefail
@@ -22,6 +22,8 @@ TRANS_ARG="${2:-random}"
 
 DIR="${HOME}/.config/wallpapers"
 [[ -d "$DIR" ]] || { echo "Wallpapers dir not found: $DIR"; exit 1; }
+
+echo "Wallpaper dir: $DIR"
 
 # Ensure swww is available
 command -v /usr/bin/swww >/dev/null 2>&1 || { echo "swww not found in PATH"; exit 1; }

@@ -2,12 +2,26 @@
   "layer": "top",
   "height": 30,
   "spacing": 4,
-
   // ── Module layout ─────────────────────────────────────────────────────────────
-  "modules-left": ["hyprland/workspaces", "hyprland/window"],
-  "modules-center": ["clock", "idle_inhibitor"],
-  "modules-right": ["bluetooth", "pulseaudio", "network", "cpu", "memory", "temperature", "backlight", "battery", "tray"],
-
+  "modules-left": [
+    "hyprland/workspaces",
+    "hyprland/window"
+  ],
+  "modules-center": [
+    "clock",
+    "idle_inhibitor"
+  ],
+  "modules-right": [
+    "bluetooth",
+    "pulseaudio",
+    "network",
+    "cpu",
+    "memory",
+    "temperature",
+    "backlight",
+    "battery",
+    "tray"
+  ],
   // ── Hyprland modules ──────────────────────────────────────────────────────────
   "hyprland/workspaces": {
     "format": "{icon}",
@@ -24,26 +38,23 @@
       "7": "7",
       "8": "8",
       "9": "9",
-      "10": "10"
+      "10": "10",
+      "11": "" // lock icon for secret workspace
     }
   },
-
   "hyprland/window": {
     "max-length": 80
   },
-
   // ── System tray ───────────────────────────────────────────────────────────────
   "tray": {
     "spacing": 10
   },
-
   // ── Clock (center) ────────────────────────────────────────────────────────────
   "clock": {
     "format": "{:%a %b %d  %I:%M %p}",
     "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
     "format-alt": "{:%Y-%m-%d}"
   },
-
   // ── System stats ──────────────────────────────────────────────────────────────
   "cpu": {
     "format": "{usage}% ",
@@ -55,23 +66,44 @@
   "temperature": {
     "critical-threshold": 80,
     "format": "{temperatureF}°F {icon}",
-    "format-icons": ["", "", ""]
+    "format-icons": [
+      "",
+      "",
+      ""
+    ]
   },
   "backlight": {
     "format": "{percent}% {icon}",
-    "format-icons": ["", "", "", "", "", "", "", "", ""]
+    "format-icons": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ]
   },
-
   // ── Battery ───────────────────────────────────────────────────────────────────
   "battery": {
-    "states": { "warning": 30, "critical": 15 },
+    "states": {
+      "warning": 30,
+      "critical": 15
+    },
     "format": "{capacity}% {icon}",
     "format-charging": "{capacity}% ",
     "format-plugged": "{capacity}% ",
     "format-alt": "{time} {icon}",
-    "format-icons": ["", "", "", "", ""]
+    "format-icons": [
+      "",
+      "",
+      "",
+      "",
+      ""
+    ]
   },
-
   // ── Network ───────────────────────────────────────────────────────────────────
   "network": {
     "format-wifi": "{essid} ({signalStrength}%) ",
@@ -82,7 +114,6 @@
     "format-alt": "{ifname}: {ipaddr}/{cidr}",
     "on-click-right": "nm-connection-editor"
   },
-
   // ── Audio ─────────────────────────────────────────────────────────────────────
   "pulseaudio": {
     "format": "{volume}% {icon} {format_source}",
@@ -98,11 +129,14 @@
       "phone": "",
       "portable": "",
       "car": "",
-      "default": ["", "", ""]
+      "default": [
+        "",
+        "",
+        ""
+      ]
     },
     "on-click": "pavucontrol"
   },
-
   // ── Bluetooth ─────────────────────────────────────────────────────────────────
   "bluetooth": {
     "format": "{status} ",
@@ -112,16 +146,21 @@
     "on-click-right": "blueman-manager",
     "tooltip-format": "{controller_alias}\n{status}\n{device_enumerate}"
   },
-
   // ── Optional Modules (uncomment to use) ───────────────────────────────────────
   "idle_inhibitor": {
     "format": "{icon}",
-    "format-icons": { "activated": "", "deactivated": "" }
+    "format-icons": {
+      "activated": "",
+      "deactivated": ""
+    }
   },
   "keyboard-state": {
     "numlock": true,
     "capslock": true,
     "format": "{name} {icon}",
-    "format-icons": { "locked": "", "unlocked": "" }
+    "format-icons": {
+      "locked": "",
+      "unlocked": ""
+    }
   }
 }

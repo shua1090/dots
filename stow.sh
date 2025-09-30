@@ -5,6 +5,7 @@
 
 stow -t ~ gitconfig vimrc waybar starship
 stow -t ~/.config/hypr hypr
+stow -t ~/.config/kitty kitty
 stow -t ~ wofi wlogout wallpapers swaync
 
 cp dbox.sh ~/bin/dbox
