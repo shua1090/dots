@@ -37,14 +37,12 @@ alias setup_plugins=setup_plugins
 source "$ZSH_PLUGIN_DIR/zsh-autocomplete/zsh-autocomplete.plugin.zsh"
 
 # TODO: clean this up
-export PATH=/home/shynn/.cargo/bin:$PATH:~/bin/:/home/shynn/tools/radiant/2025.1/bin/lin64
+export PATH=/home/shynn/.cargo/bin:~/bin/:/home/shynn/tools/radiant/2025.1/bin/lin64:$PATH
 
 # === NVM ===
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
-
 
 # === SDK MAN ===
 export SDKMAN_DIR="$HOME/.sdkman"

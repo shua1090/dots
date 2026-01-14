@@ -6,8 +6,10 @@ stow -t ~ gitconfig
 
 # stow -t ~ gitconfig vimrc waybar starship
 # stow -t ~/.config/hypr hypr
-stow -t ~/.config kitty
-stow -t ~/.config nvim
+mkdir -p ~/.config/kitty
+stow -t ~/.config/kitty kitty
+mkdir -p ~/.config/nvim
+stow -t ~/.config/nvim nvim
 cp .zshrc ~/.zshrc
 # stow -t ~ .zshrc
 # stow -t ~ wofi wlogout wallpapers swaync
