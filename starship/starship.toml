@@ -1,248 +1,59 @@
-# ----- Global ---------------------------------------------------------------
-# Two-line prompt like p10k: info on line 1, prompt char on line 2.
-add_newline = true
-command_timeout = 1200
-scan_timeout = 50
-# Use a palette so we can tweak colors once.
-palette = "p10kish"
+# ~/.config/starship.toml
 
-# Left prompt (line 1), then newline + prompt char (line 2).
+# Closer to OMZ feel (no blank line between prompts)
+add_newline = false
+
+# Keep prompt snappy (avoid slow repo scans / commands blocking prompt)
+command_timeout = 500
+scan_timeout = 30
+
+# Two-line prompt: info line, then prompt char line
 format = """
-$os$container$hostname$username\
 $directory\
-$git_branch$git_status\
-$kubernetes$docker_context\
-$python$conda$nodejs$rust$golang$java$dotnet\
-$aws$gcloud$terraform$nix_shell$package\
-$line_break\
+$git_branch$git_state$git_status\
+$python$rust$nodejs$java\
+$cmd_duration
 $character"""
 
-# Right prompt (line 1 right side): clock, long-running cmd duration, background jobs, battery if low.
-right_format = "$jobs$cmd_duration$time$battery"
-
-# Compact continuation for wrapped commands.
-continuation_prompt = "  … "
-
-# ----- Styles / Palette -----------------------------------------------------
-[palettes.p10kish]
-fg = "white"
-dim = "bright-black"
-accent = "cyan"
-ok = "green"
-warn = "yellow"
-err = "red"
-violet = "purple"
-blue = "blue"
-hint = "bright-black"
-
-# ----- Prompt Character & Modes --------------------------------------------
-[character]
-success_symbol = "[❯](bold ok)"
-error_symbol   = "[❯](bold err)"
-vicmd_symbol   = "[❮](bold accent)"
-format = "$symbol "
-
-# Show a subtle marker if you’re root or via sudo.
-[status]
-style = "bold err"
-symbol = "✘ "
-success_symbol = ""
-format = "[$symbol$status]($style) "
-map_symbol = true
-disabled = false
-
-[sudo]
-style = "bold warn"
-symbol = "⚡ "
-disabled = false
-format = "[$symbol]($style) "
-
-[jobs]
-symbol = "✦ "
-style = "bold accent"
-threshold = 1
-format = "[$symbol$number]($style) "
-
-# ----- Time & Duration ------------------------------------------------------
-[cmd_duration]
-min_time = 2000
-format = "took [$duration]($style) "
-style = "dim"
-
-[time]
-disabled = false
-time_format = "%H:%M"
-format = "[$time]($style) "
-style = "dim"
-
-[battery]
-disabled = false
-full_symbol = " "
-charging_symbol = " "
-discharging_symbol = " "
-unknown_symbol = " "
-format = "[$symbol$percentage]($style) "
-[[battery.display]]
-threshold = 25
-style = "bold warn"
-
-# ----- Identity & Context ---------------------------------------------------
-[os]
-disabled = false
-format = "[$symbol]($style) "
-style = "dim"
-# Feel free to trim this to the OSes you use.
-[os.symbols]
-Macos = " "
-Linux = " "
-Windows = " "
-
-[username]
-style_user = "bold fg"
-style_root = "bold err"
-format = "[$user]($style)"
-show_always = false
-
-[hostname]
-ssh_only = true
-format = "[@$hostname]($style) "
-style = "dim"
-
-[container]
-format = "[$symbol $name]($style) "
-symbol = "🍱"
-style = "dim"
-disabled = false
-
-# ----- Location -------------------------------------------------------------
 [directory]
-style = "bold accent"
 truncation_length = 3
 truncate_to_repo = true
-read_only = ""
-read_only_style = "dim"
-fish_style_pwd_dir_length = 1
-format = "[$path]($style)[$read_only]($read_only_style) "
+style = "bold cyan"
 
-# ----- Git ------------------------------------------------------------------
 [git_branch]
-symbol = " "
-style = "bold violet"
-format = "on [$symbol$branch]($style) "
+format = "[$symbol$branch]($style) "
+symbol = " "
+style = "bold purple"
 
 [git_status]
-style = "bold err"
-format = "([$all_status$ahead_behind]($style) )"
-# Tweak symbols to be compact but expressive.
-conflicted = "⚠"
-ahead = "⇡${count}"
-behind = "⇣${count}"
-diverged = "⇕⇡${ahead_count}⇣${behind_count}"
-stashed = "✭"
-staged = "+${count}"
-modified = "~${count}"
-renamed = "»${count}"
-deleted = "✗${count}"
-untracked = "?${count}"
+format = "[$all_status$ahead_behind]($style) "
+style = "bold red"
 
-# ----- Runtimes / Toolchains -----------------------------------------------
+[git_state]
+format = "([$state( $progress_current/$progress_total)]($style)) "
+style = "bold yellow"
+
 [python]
-symbol = " "
-style = "bold blue"
-# Show venv/pyenv + version when relevant; quiet otherwise.
-format = 'via [${symbol}${pyenv_prefix}${version} (${virtualenv})]($style) '
-pyenv_version_name = true
-detect_extensions = ["py", "ipynb"]
-detect_files = ["pyproject.toml", "requirements.txt", ".python-version", "Pipfile", "poetry.lock"]
-python_binary = "python3"
-
-[conda]
-symbol = "🧪 "
-style = "bold blue"
-format = "via [$symbol$environment]($style) "
-
-[nodejs]
-symbol = " "
-style = "bold green"
-format = "via [$symbol$version]($style) "
-detect_files = ["package.json", "pnpm-lock.yaml", "yarn.lock", "bun.lockb"]
+format = 'via [${symbol}(${version} )(\($virtualenv\) )]($style)'
+symbol = "py "
+style = "bold yellow"
 
 [rust]
-symbol = " "
+format = "via [$symbol($version )]($style)"
+symbol = "rs "
 style = "bold red"
-format = "via [$symbol$version]($style) "
 
-[golang]
-symbol = " "
-style = "bold cyan"
-format = "via [$symbol$version]($style) "
+[nodejs]
+format = "via [$symbol($version )]($style)"
+symbol = "node "
+style = "bold green"
 
 [java]
-symbol = " "
-style = "bold red"
-format = "via [$symbol$version]($style) "
-
-[dotnet]
-symbol = ".NET "
-style = "bold purple"
-format = "via [$symbol($version)]($style) "
-
-[package]
-symbol = "󰏗 "
-style = "dim"
-format = "is [$symbol$version]($style) "
-display_private = true
-
-# ----- Cloud / DevOps -------------------------------------------------------
-[aws]
-symbol = " "
-style = "bold warn"
-format = "with [$symbol($profile)(@$region)]($style) "
-expiration_symbol = "⏳"
-
-[gcloud]
-symbol = "󱇶 "
-style = "bold warn"
-format = "with [$symbol$account(@$region)]($style) "
-
-[kubernetes]
-symbol = "☸ "
-format = "[$symbol$context(::$namespace)](bold blue) "
-disabled = false
-detect_files = ["kubernetes.yaml", "k8s.yaml", "helmfile.yaml", "Chart.yaml"]
-# Optional: shorten noisy managed contexts.
-contexts = [
-  { context_pattern = "gke_.*_(?P<cluster>[\\w-]+)", context_alias = "gke:$cluster" },
-  { context_pattern = "arn:aws:eks:.*:cluster/(?P<cluster>[\\w-]+)", context_alias = "eks:$cluster" }
-]
-
-[docker_context]
-symbol = " "
-style = "bold cyan"
-format = "via [$symbol$context]($style) "
-
-[terraform]
-symbol = "󱁢 "
-style = "bold violet"
-format = "via [$symbol$workspace]($style) "
-
-[nix_shell]
-symbol = " "
+format = "via [$symbol($version )]($style)"
+symbol = "java "
 style = "bold blue"
-format = "via [$symbol$state( $name)]($style) "
 
-# ----- Misc / Nice-to-haves -------------------------------------------------
-[cmd_guard]  # (custom idea placeholder; starship ignores unknown tables)
-# This is just a comment hint: consider adding a shell alias guard or safe-rm.
-
-# Show the active shell only when it’s not your default.
-[shell]
-disabled = true
-
-# Keep prompt tight on empty envs.
-[env_var]
-# Example: surface a PROJECT env var if set.
-variable = "PROJECT"
-format = "[$env_value]($style) "
-style = "bold accent"
-disabled = true
+[cmd_duration]
+min_time = 500
+format = "took [$duration]($style) "
+style = "bold yellow"

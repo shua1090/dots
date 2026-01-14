@@ -23,3 +23,5 @@
 [fetch]
         recurseSubmodules = on-demand
         parallel = 0
+[init]
+	defaultBranch = main
