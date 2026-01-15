@@ -2,3 +2,8 @@
 require("core.options")
 require("core.keymaps")
 require("core.lazy")
+
+
+-- Theme
+vim.cmd.colorscheme("tokyonight")
+

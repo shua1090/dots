@@ -25,3 +25,5 @@ vim.opt.mouse = ""
 
 -- vim.opt.timeout = true
 -- vim.opt.timeoutlen = 300
+--
+

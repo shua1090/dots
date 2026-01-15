@@ -21,7 +21,7 @@ require("oil").setup({
     }
 })
 
-vim.keymap.set("n", "<leader>e", function()
+vim.keymap.set("n", "<leader>i", function()
     local oil = require("oil")
     local bufname = vim.api.nvim_buf_get_name(0)
 
