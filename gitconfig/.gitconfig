@@ -25,3 +25,5 @@
         parallel = 0
 [init]
 	defaultBranch = main
+[core]
+	editor = nvim
