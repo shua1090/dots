@@ -7,4 +7,3 @@ return {
     require("config.image")
   end
 }
-

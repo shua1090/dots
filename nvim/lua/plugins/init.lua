@@ -15,5 +15,8 @@ return {
     require("plugins.project"),
     -- require("plugins.image"),
     require("plugins.gitsigns"),
-    require("plugins.mason")
+    require("plugins.mason"),
+    require("plugins.cmp"),
+    require("plugins.aerial"),
+    require("plugins.lsp"),
 }

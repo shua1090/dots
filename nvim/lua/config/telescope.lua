@@ -2,14 +2,16 @@ local telescope = require("telescope")
 local builtin = require("telescope.builtin")
 
 telescope.setup({
-    defaults = {
+  defaults = {
         mappings = {
             i = {
                 ["<Esc>"] = "close",
             },
         },
-    },
+  },
 })
+
+vim.keymap.set("n", "<C-f>", builtin.current_buffer_fuzzy_find, { desc = "Find in buffer (Telescope)" })
 
 -- Project picking
 require("telescope").load_extension("projects")
@@ -26,4 +28,3 @@ vim.keymap.set("n", "<leader>fs", builtin.treesitter, {
 vim.keymap.set("n", "<leader>pp", function()
   require("telescope").extensions.projects.projects({})
 end, { desc = "Pick project" })
-
