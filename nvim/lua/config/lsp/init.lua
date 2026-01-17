@@ -37,9 +37,21 @@ vim.api.nvim_create_autocmd("LspAttach", {
     vim.api.nvim_create_autocmd("CursorHold", {
       buffer = bufnr,
       callback = function()
-        vim.lsp.buf.hover()
+        local pos = vim.api.nvim_win_get_cursor(0)
+        local diags = vim.diagnostic.get(0, { lnum = pos[1] - 1 })
+        if #diags > 0 then
+          vim.diagnostic.open_float(nil, {
+            focus = false,
+            border = "rounded",
+            source = "always",
+            scope = "cursor",
+            max_width = 80,
+          })
+        else
+          vim.lsp.buf.hover()
+        end
       end,
-      desc = "LSP hover on idle",
+      desc = "Show diagnostic or hover on idle",
     })
   end,
 })

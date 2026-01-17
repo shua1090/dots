@@ -19,4 +19,5 @@ return {
     require("plugins.cmp"),
     require("plugins.aerial"),
     require("plugins.lsp"),
+    require("plugins.diagnostics"),
 }
