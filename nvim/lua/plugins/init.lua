@@ -13,11 +13,15 @@ return {
     require("plugins.theme"),
     require("plugins.toggleterm"),
     require("plugins.project"),
-    -- require("plugins.image"),
+    -- require("plugins.image"),init.lua
     require("plugins.gitsigns"),
     require("plugins.mason"),
     require("plugins.cmp"),
     require("plugins.aerial"),
     require("plugins.lsp"),
     require("plugins.diagnostics"),
+    require("plugins.triforce"),
+    require("plugins.lazygit"),
+    require("plugins.alpha"),
+    require("plugins.neoscroll")
 }
