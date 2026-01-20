@@ -17,6 +17,16 @@ vim.api.nvim_create_autocmd("LspAttach", {
     -- map("n", "K", vim.lsp.buf.hover, "Hover documentation")
     map("n", "<leader>lR", vim.lsp.buf.rename, "Rename symbol")
     map("n", "<leader>la", vim.lsp.buf.code_action, "Code actions")
+    map("n", "<leader>lf", function()
+      local clients = vim.lsp.get_clients({ bufnr = bufnr })
+      for _, client in ipairs(clients) do
+        if client.supports_method("textDocument/formatting") then
+          vim.lsp.buf.format({ bufnr = bufnr, async = true })
+          return
+        end
+      end
+      vim.notify("No LSP formatter attached for this buffer", vim.log.levels.WARN)
+    end, "Format buffer")
 
     -- Diagnostics
     -- map("n", "[d", vim.diagnostic.goto_prev, "Previous diagnostic")

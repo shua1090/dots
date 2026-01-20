@@ -64,7 +64,6 @@ source "$ZSH_PLUGIN_DIR/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 # ---------------------------
 source "$ZSH_PLUGIN_DIR/zsh-autosuggestions/zsh-autosuggestions.zsh"
 
-if [[ $(uname) == "Darwin" ]]; then
-    alias px4='cd ~/Documents/px4/'
-    alias monorepo='cd ~/Documents/monorepo/'
-fi
+alias px4='cd ~/Documents/Mach/px4/'
+alias monorepo='cd ~/Documents/Mach/monorepo/'
+

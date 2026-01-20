@@ -17,11 +17,16 @@ return {
     require("plugins.gitsigns"),
     require("plugins.mason"),
     require("plugins.cmp"),
+    require("plugins.avante"),
     require("plugins.aerial"),
     require("plugins.lsp"),
     require("plugins.diagnostics"),
     require("plugins.triforce"),
     require("plugins.lazygit"),
     require("plugins.alpha"),
-    require("plugins.neoscroll")
+    require("plugins.neoscroll"),
+    -- require("plugins.precognition")
+    require("plugins.rainbow"),
+    require("plugins.themify"),
+    require("plugins.difft")
 }
