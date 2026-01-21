@@ -13,12 +13,11 @@ require("toggleterm").setup({
   close_on_exit = false,
 })
 
-vim.keymap.set("n", "<leader>t", function()
+vim.keymap.set("n", "<leader><CR>", function()
   require("toggleterm").toggle()
 end, { desc = "Toggle terminal" })
 
-vim.keymap.set("t", "<leader>t", [[<C-\><C-n><cmd>lua require("toggleterm").toggle()<CR>]],
+vim.keymap.set("t", "<leader><CR>", [[<C-\><C-n><cmd>lua require("toggleterm").toggle()<CR>]],
   { desc = "Toggle terminal" }
 )
-
 
