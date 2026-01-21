@@ -2,7 +2,7 @@ require("avante").setup({
     provider = "ollama",
     auto_suggestions_provider = "ollama_fast",
     behaviour = {
-        auto_suggestions = true,
+        auto_suggestions = false,
     },
     suggestion = {
         debounce = 500,

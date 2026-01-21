@@ -1,43 +1,40 @@
 vim.api.nvim_create_user_command("BranchDiff", function(opts)
-  local args = opts.fargs
-  if #args == 0 then
-    vim.notify("Usage: :BranchDiff <branch> [--two-dot|--reverse]", vim.log.levels.ERROR)
+  local target = opts.fargs[1]
+  if not target then
+    vim.notify("Usage: :BranchDiff <branch>", vim.log.levels.ERROR)
     return
   end
 
-  local target = args[1]
-  local two_dot = vim.tbl_contains(args, "--two-dot")
-  local reverse = vim.tbl_contains(args, "--reverse")
-
-  -- Get current branch
   local current = vim.fn.system("git branch --show-current"):gsub("%s+", "")
   if current == "" then
-    vim.notify("Not on a branch", vim.log.levels.ERROR)
+    vim.notify("Detached HEAD", vim.log.levels.ERROR)
     return
   end
 
-  local sep = two_dot and ".." or "..."
-  local lhs, rhs = current, target
-
-  if reverse then
-    lhs, rhs = rhs, lhs
-  end
-
-  local spec = string.format("%s%s%s", lhs, sep, rhs)
-
-  require("difft").diff(spec)
+  require("difft").diff(string.format("%s...%s", target, current))
 end, {
-  nargs = "+",
+  nargs = 1,
   complete = "customlist,v:lua.GitBranchComplete",
 })
 
+vim.keymap.set("n", "<leader>gd", function()
+  vim.ui.input({ prompt = "Diff current branch against: " }, function(branch)
+    if branch and branch ~= "" then
+      vim.cmd("BranchDiff " .. branch)
+    end
+  end)
+end, { desc = "Git diff vs branch (Difftastic)" })
 
 return {
   "ahkohd/difft.nvim",
   config = function()
     require("difft").setup({
-      command = "GIT_EXTERNAL_DIFF='difft --color=always' git diff",
-      layout = "float", -- keeps context!
+      command = table.concat({
+        "GIT_EXTERNAL_DIFF='difft",
+        "--color=always",
+        "--display side-by-side",
+        "' git diff",
+      }, " "),
     })
   end,
 }

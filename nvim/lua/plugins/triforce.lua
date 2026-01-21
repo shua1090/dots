@@ -1,4 +1,7 @@
 return {
-  "karb94/neoscroll.nvim",
-  opts = {},
+  "gisketch/triforce.nvim",
+  dependencies = { "nvzone/volt" },
+  config = function()
+    require("config.triforce")
+  end,
 }
