@@ -8,6 +8,11 @@ hop.setup({
     dim_unmatched = true,
 })
 
-vim.keymap.set({ "n", "x", "o" }, "<leader>w", function()
-    hop.hint_words()
+vim.keymap.del("n", "gw")
+vim.keymap.del("x", "gw")
+vim.keymap.del("o", "gw")
+
+vim.keymap.set({ "n", "x", "o" }, "gw", function()
+  require("hop").hint_words()
 end, { desc = "Hop to visible word" })
+
