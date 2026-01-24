@@ -21,7 +21,7 @@ return {
     require("plugins.aerial"),
     require("plugins.lsp"),
     require("plugins.diagnostics"),
-    require("plugins.triforce"),
+    -- require("plugins.gamify"),
     require("plugins.lazygit"),
     require("plugins.alpha"),
     require("plugins.neoscroll"),

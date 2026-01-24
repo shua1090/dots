@@ -1,16 +1,24 @@
-vim.keymap.set("n", "<C-t>", function()
-  require("cokeline.mappings").pick("focus")
-end, { desc = "Pick buffer from tabline" })
-
-
 return {
-  {
   "willothy/nvim-cokeline",
   dependencies = {
-    "nvim-lua/plenary.nvim",        -- Required for v0.4.0+
-    "nvim-tree/nvim-web-devicons", -- If you want devicons
-    "stevearc/resession.nvim"       -- Optional, for persistent history
+    "nvim-lua/plenary.nvim",
+    "nvim-tree/nvim-web-devicons",
+    "stevearc/resession.nvim",
   },
-  config = true
+  config = function()
+    require("cokeline").setup({
+      pick = {
+        use_filename = false,
+        letters = "asdfjkl;ghnmxcvbziowerutyqpASDFJKLGHNMXCVBZIOWERTYQP",
+      },
+    })
+
+    vim.keymap.set(
+      "n",
+      "<leader>t",
+      "<Plug>(cokeline-pick-focus)",
+      { desc = "Pick buffer from bufferline", silent = true }
+    )
+  end,
 }
-};
+

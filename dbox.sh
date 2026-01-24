@@ -27,7 +27,7 @@ choose_box() {
 
   echo "Available boxes:"
   nl -ba <<<"$names"
-  echo
+  echo;
   read -rp "Pick number OR type a name: " sel
 
   # If it's a number, map to that line; else treat as name

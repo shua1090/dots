@@ -1,6 +1,27 @@
+-- Open (or toggle) the chat buffer
+vim.keymap.set("n", "<leader>cc", function()
+  require("codecompanion").toggle({})
+end, { desc = "Toggle CodeCompanion Chat (centered float)" })
+
+vim.opt.splitright = true
+
+-- Open action palette
+vim.keymap.set("n", "<leader>ca", "<cmd>CodeCompanionActions<cr>", {
+  desc = "CodeCompanion Action Palette",
+})
+
 require("codecompanion").setup({
+  --   display = {
+  -- chat = {
+  --     window = {
+  --         position = right
+  --     }
+  -- }},
   adapters = {
     acp = {
+      opts = {
+        show_presets = false,  -- only show your HTTP adapters
+      },
       codex = function()
         return require("codecompanion.adapters").extend("codex", {
           defaults = {
@@ -10,6 +31,9 @@ require("codecompanion").setup({
       end,
     },
     http = {
+      opts = {
+        show_presets = false,  -- only show your HTTP adapters
+      },
       ollama = function()
         return require("codecompanion.adapters").extend("ollama", {
           env = {
