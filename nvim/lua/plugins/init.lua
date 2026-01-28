@@ -31,6 +31,9 @@ return {
     require("plugins.difft"),
     require("plugins.diffview"),
     require("plugins.theme-hub"),
+    require("plugins.kitty-scrollback"),
+    require("plugins.smart-backspace"),
+    require("plugins.nvim-lightbulb"),
 
     require("plugins.winmove"),
     require("plugins.barbar"),
