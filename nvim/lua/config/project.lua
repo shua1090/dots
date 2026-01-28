@@ -10,6 +10,7 @@ require("project_nvim").setup({
     "Cargo.toml",
     "pyproject.toml",
     "go.mod",
+    "README.md",
   },
 
   -- Make project root the global cwd
