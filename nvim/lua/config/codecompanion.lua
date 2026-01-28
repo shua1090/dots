@@ -17,6 +17,15 @@ require("codecompanion").setup({
   --         position = right
   --     }
   -- }},
+    extensions = {
+       spinner = {
+         -- enabled = true, -- This is the default
+         opts = {
+           -- Your spinner configuration goes here
+            style = "noice",
+         },
+       },
+     },
   adapters = {
     acp = {
       opts = {

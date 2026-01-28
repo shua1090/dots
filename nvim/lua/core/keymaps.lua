@@ -24,10 +24,19 @@ pcall(vim.keymap.del, "n", "gw")
 pcall(vim.keymap.del, "x", "gw")
 pcall(vim.keymap.del, "o", "gw")
 
-vim.keymap.set("n", "<C-t>", function()
-  require("cokeline.mappings").pick("focus")
-end, { desc = "Pick buffer from tabline" })
+vim.keymap.set("n", "<leader>tt", "<Cmd>BufferPick<CR>", { desc = "Pick buffer", silent = true })
+vim.keymap.set("n", "<leader>tc", "<Cmd>BufferClose<CR>", { desc = "Close buffer", silent = true })
+vim.keymap.set("n", "<leader>tn", "<Cmd>BufferNext<CR>", { desc = "Next buffer", silent = true })
+vim.keymap.set("n", "<leader>tN", "<Cmd>BufferPrevious<CR>", { desc = "Previous buffer", silent = true })
 
+vim.keymap.set("n", "<leader>gd", "<Cmd>DiffviewOpen<CR>", { desc = "Diffview: staged + unstaged", silent = true })
+vim.keymap.set("n", "<leader>gD", function()
+  vim.ui.input({ prompt = "Diff current branch against: " }, function(branch)
+    if branch and branch ~= "" then
+      vim.cmd("DiffviewOpen " .. branch .. "...HEAD")
+    end
+  end)
+end, { desc = "Diffview: diff against branch", silent = true })
 
 -- remap gw to Hop (Helix-style)
 vim.keymap.set({ "n", "x", "o" }, "gw", function()

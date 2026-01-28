@@ -1,5 +1,5 @@
 require("project_nvim").setup({
-  manual_mode = false,
+  manual_mode = true,
 
   detection_methods = { "pattern" },
 
@@ -10,13 +10,11 @@ require("project_nvim").setup({
     "Cargo.toml",
     "pyproject.toml",
     "go.mod",
-    "README.md",
   },
 
   -- Make project root the global cwd
   scope_chdir = "global",
 
-  silent_chdir = true,
+  silent_chdir = false,
 })
-
 

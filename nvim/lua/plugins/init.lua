@@ -29,8 +29,12 @@ return {
     require("plugins.rainbow"),
     require("plugins.themify"),
     require("plugins.difft"),
+    require("plugins.diffview"),
+    require("plugins.theme-hub"),
 
     require("plugins.winmove"),
-    require("plugins.cokeline"),
-    require("plugins.buffer-sticks")
+    require("plugins.barbar"),
+    require("plugins.buffer-sticks"),
+
+    require("plugins.noice")
 }

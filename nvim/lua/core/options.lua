@@ -28,6 +28,18 @@ vim.opt.mouse = ""
 vim.o.list = true
 vim.o.listchars = 'tab:» ,lead:•,trail:•'
 
+-- Smoother diffs (closer to VSCode visuals)
+opt.diffopt = {
+  "internal",
+  "filler",
+  "closeoff",
+  "context:3",
+  "algorithm:histogram",
+  "indent-heuristic",
+  "linematch:60",
+}
+opt.fillchars:append({ diff = " " })
+
 -- vim.opt.timeout = true
 -- vim.opt.timeoutlen = 300
 --

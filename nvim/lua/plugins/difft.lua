@@ -17,14 +17,6 @@ end, {
   complete = "customlist,v:lua.GitBranchComplete",
 })
 
-vim.keymap.set("n", "<leader>gd", function()
-  vim.ui.input({ prompt = "Diff current branch against: " }, function(branch)
-    if branch and branch ~= "" then
-      vim.cmd("BranchDiff " .. branch)
-    end
-  end)
-end, { desc = "Git diff vs branch (Difftastic)" })
-
 return {
   "ahkohd/difft.nvim",
   config = function()
@@ -38,4 +30,3 @@ return {
     })
   end,
 }
-
