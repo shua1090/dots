@@ -31,5 +31,6 @@ return {
     require("plugins.difft"),
 
     require("plugins.winmove"),
-    require("plugins.cokeline")
+    require("plugins.cokeline"),
+    require("plugins.buffer-sticks")
 }
