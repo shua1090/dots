@@ -5,8 +5,8 @@ local uv = vim.loop
 -- Allow overriding in init.lua or user commands: vim.g.alpha_favorite_projects = { { name = "proj", path = "~/proj" }, ... }
 local favorite_projects = vim.g.alpha_favorite_projects or {
   { name = "dots", path = "~/Documents/dots" },
-  { name = "px4", path = "~/Documents/px4" },
-  { name = "work", path = "~/Projects/work" },
+  { name = "px4", path = "~/Documents/Mach/px4" },
+  { name = "monorepo", path = "~/Projects/Mach/monorepo" },
 }
 
 local apple_art = [[
