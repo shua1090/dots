@@ -3,8 +3,8 @@
 
 #  global history
 HISTFILE="$HOME/.zsh_history"
-HISTSIZE=100000
-SAVEHIST=100000
+HISTSIZE=1000
+SAVEHIST=1000
 
 setopt APPEND_HISTORY        # Don't overwrite history
 setopt SHARE_HISTORY         # Share history between terminals
@@ -23,9 +23,9 @@ ZSH_PLUGIN_DIR="$HOME/.zsh/plugins"
 
 setup_plugins() {
   mkdir -p "$ZSH_PLUGIN_DIR"
-  git clone --depth 1 https://github.com/marlonrichert/zsh-autocomplete.git "$ZSH_PLUGIN_DIR/zsh-autocomplete"
-  git clone --depth 1 https://github.com/zsh-users/zsh-syntax-highlighting.git "$ZSH_PLUGIN_DIR/zsh-syntax-highlighting"
-  git clone --depth 1 https://github.com/zsh-users/zsh-autosuggestions.git "$ZSH_PLUGIN_DIR/zsh-autosuggestions"
+  timeout 5 git clone --depth 1 https://github.com/marlonrichert/zsh-autocomplete.git "$ZSH_PLUGIN_DIR/zsh-autocomplete" || echo "autcomplete clone failed"
+  timeout 5 git clone --depth 1 https://github.com/zsh-users/zsh-syntax-highlighting.git "$ZSH_PLUGIN_DIR/zsh-syntax-highlighting" || echo "syntax highlighting clone failed"
+  timeout 5 git clone --depth 1 https://github.com/zsh-users/zsh-autosuggestions.git "$ZSH_PLUGIN_DIR/zsh-autosuggestions"  || echo "autosuggestion clone failed"
 }
 
 alias setup_plugins=setup_plugins
@@ -50,6 +50,11 @@ export SDKMAN_DIR="$HOME/.sdkman"
 
 # === Aliases ===
 alias gs='git status'
+alias px4='cd ~/Documents/Mach/px4/'
+alias monorepo='cd ~/Documents/Mach/monorepo/'
+alias ls='ls --color=auto'
+alias l='ls -lah'
+alias grep='grep --color=auto'
 
 
 # === Starship ==
@@ -63,7 +68,4 @@ source "$ZSH_PLUGIN_DIR/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 # Autosuggestions
 # ---------------------------
 source "$ZSH_PLUGIN_DIR/zsh-autosuggestions/zsh-autosuggestions.zsh"
-
-alias px4='cd ~/Documents/Mach/px4/'
-alias monorepo='cd ~/Documents/Mach/monorepo/'
 

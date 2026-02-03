@@ -6,4 +6,3 @@ require("core.lazy")
 
 -- Theme
 vim.cmd.colorscheme("tokyonight")
-

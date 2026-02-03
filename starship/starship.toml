@@ -1,59 +1,93 @@
 # ~/.config/starship.toml
 
-# Closer to OMZ feel (no blank line between prompts)
 add_newline = false
 
-# Keep prompt snappy (avoid slow repo scans / commands blocking prompt)
-command_timeout = 500
-scan_timeout = 30
-
-# Two-line prompt: info line, then prompt char line
+# Left side: Critical context
 format = """
+$os\
 $directory\
-$git_branch$git_state$git_status\
-$python$rust$nodejs$java\
-$cmd_duration
+$git_branch\
+$git_status\
+$git_metrics\
+$git_state\
+$fill\
+$rust\
+$python\
+$nodejs\
+$line_break\
 $character"""
 
+# Right side: System/Meta info
+right_format = """$cmd_duration$battery$time"""
+
+[fill]
+symbol = ' '
+
+[character]
+success_symbol = '[󰄾](bold green)'
+error_symbol = '[󰄾](bold red)'
+vicmd_symbol = '[󰄽](bold purple)'
+
 [directory]
+style = 'bold cyan'
 truncation_length = 3
 truncate_to_repo = true
-style = "bold cyan"
+read_only = ' 󰌾'
 
 [git_branch]
-format = "[$symbol$branch]($style) "
-symbol = " "
-style = "bold purple"
+symbol = ' '
+style = 'bold purple'
+format = 'on [$symbol$branch]($style) '
 
 [git_status]
-format = "[$all_status$ahead_behind]($style) "
-style = "bold red"
-
-[git_state]
-format = "([$state( $progress_current/$progress_total)]($style)) "
-style = "bold yellow"
-
-[python]
-format = 'via [${symbol}(${version} )(\($virtualenv\) )]($style)'
-symbol = "py "
-style = "bold yellow"
+style = 'bold red'
+# Use literal single quotes here to avoid TOML escape errors
+format = '([\[$all_status$ahead_behind\]]($style) )'
+stashed = '≡'
+modified = '!'
+untracked = '?'
+deleted = '✘'
 
 [rust]
-format = "via [$symbol($version )]($style)"
-symbol = "rs "
-style = "bold red"
+symbol = ' '
+style = 'bold #e44d26'
+format = 'via [$symbol($version )]($style)'
 
-[nodejs]
-format = "via [$symbol($version )]($style)"
-symbol = "node "
-style = "bold green"
+[python]
+symbol = ' '
+style = 'bold yellow'
+format = 'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'
 
-[java]
-format = "via [$symbol($version )]($style)"
-symbol = "java "
-style = "bold blue"
+[battery]
+full_symbol = '󰁹 '
+charging_symbol = '󰂄 '
+discharging_symbol = '󰂃 '
+[[battery.display]]
+threshold = 30
+style = 'bold red'
 
 [cmd_duration]
 min_time = 500
-format = "took [$duration]($style) "
-style = "bold yellow"
+format = 'took [󱎫 $duration]($style) '
+style = 'bold yellow'
+
+[time]
+disabled = false
+time_format = '%R'
+style = 'bold #595959'
+format = 'at [$time]($style)'
+
+[os]
+disabled = false
+style = 'bold white'
+
+[os.symbols]
+Macos = '󰀵 '
+Fedora = ' '
+Linux = '󰌽 '
+
+[git_metrics]
+added_style = "bold green"
+deleted_style = "bold red"
+format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
+disabled = false

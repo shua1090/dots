@@ -39,5 +39,5 @@ return {
     require("plugins.barbar"),
     require("plugins.buffer-sticks"),
 
-    require("plugins.noice")
+    require("plugins.noice"),
 }
