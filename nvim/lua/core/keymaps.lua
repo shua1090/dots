@@ -25,7 +25,7 @@ pcall(vim.keymap.del, "x", "gw")
 pcall(vim.keymap.del, "o", "gw")
 
 vim.keymap.set("n", "<leader>tt", "<Cmd>BufferPick<CR>", { desc = "Pick buffer", silent = true })
-vim.keymap.set("n", "<leader>tc", "<Cmd>BufferClose<CR>", { desc = "Close buffer", silent = true })
+vim.keymap.set("n", "<leader>tq", "<Cmd>BufferClose<CR>", { desc = "Close buffer", silent = true })
 vim.keymap.set("n", "<leader>tn", "<Cmd>BufferNext<CR>", { desc = "Next buffer", silent = true })
 vim.keymap.set("n", "<leader>tN", "<Cmd>BufferPrevious<CR>", { desc = "Previous buffer", silent = true })
 

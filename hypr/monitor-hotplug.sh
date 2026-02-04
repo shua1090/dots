@@ -27,7 +27,7 @@ monitor=desc:${INTERNAL_DESC},disable"
 }
 
 has_external() {
-    hyprctl monitors -j 2>/dev/null | grep -Fq "${EXTERNAL_DESC}"
+    hyprctl monitors all -j 2>/dev/null | grep -Fq "${EXTERNAL_DESC}"
 }
 
 # Initial state check
