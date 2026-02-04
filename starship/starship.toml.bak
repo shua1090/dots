@@ -1,0 +1,59 @@
+# ~/.config/starship.toml
+
+# Closer to OMZ feel (no blank line between prompts)
+add_newline = false
+
+# Keep prompt snappy (avoid slow repo scans / commands blocking prompt)
+command_timeout = 500
+scan_timeout = 30
+
+# Two-line prompt: info line, then prompt char line
+format = """
+$directory\
+$git_branch$git_state$git_status\
+$python$rust$nodejs$java\
+$cmd_duration
+$character"""
+
+[directory]
+truncation_length = 3
+truncate_to_repo = true
+style = "bold cyan"
+
+[git_branch]
+format = "[$symbol$branch]($style) "
+symbol = " "
+style = "bold purple"
+
+[git_status]
+format = "[$all_status$ahead_behind]($style) "
+style = "bold red"
+
+[git_state]
+format = "([$state( $progress_current/$progress_total)]($style)) "
+style = "bold yellow"
+
+[python]
+format = 'via [${symbol}(${version} )(\($virtualenv\) )]($style)'
+symbol = "py "
+style = "bold yellow"
+
+[rust]
+format = "via [$symbol($version )]($style)"
+symbol = "rs "
+style = "bold red"
+
+[nodejs]
+format = "via [$symbol($version )]($style)"
+symbol = "node "
+style = "bold green"
+
+[java]
+format = "via [$symbol($version )]($style)"
+symbol = "java "
+style = "bold blue"
+
+[cmd_duration]
+min_time = 500
+format = "took [$duration]($style) "
+style = "bold yellow"
