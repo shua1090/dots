@@ -1,5 +1,6 @@
 # ~/.config/starship.toml
-
+scan_timeout = 20
+command_timeout = 300
 add_newline = false
 
 # Left side: Critical context
