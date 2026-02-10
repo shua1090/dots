@@ -1,5 +1,46 @@
 local builtin = require("telescope.builtin")
 
+vim.g.lsp_autoshow_enabled = vim.g.lsp_autoshow_enabled ~= false
+
+local function close_autoshow_floats()
+  for _, winid in ipairs(vim.api.nvim_list_wins()) do
+    local cfg = vim.api.nvim_win_get_config(winid)
+    if cfg.relative ~= "" then
+      local ok, is_autoshow = pcall(vim.api.nvim_win_get_var, winid, "lsp_autoshow_float")
+      if ok and is_autoshow then
+        pcall(vim.api.nvim_win_close, winid, true)
+      end
+    end
+  end
+end
+
+local function open_diagnostic_float(opts)
+  local _, winid = vim.diagnostic.open_float(nil, vim.tbl_extend("force", {
+    focus = false,
+    focusable = false,
+    border = "rounded",
+    close_events = { "CursorMoved", "CursorMovedI", "InsertCharPre", "WinScrolled" },
+  }, opts or {}))
+  if winid and vim.api.nvim_win_is_valid(winid) then
+    pcall(vim.api.nvim_win_set_var, winid, "lsp_autoshow_float", true)
+  end
+end
+
+local base_hover_handler = vim.lsp.handlers.hover
+vim.lsp.handlers["textDocument/hover"] = function(err, result, ctx, config)
+  local bufnr, winid = base_hover_handler(err, result, ctx, vim.tbl_extend("force", {
+    border = "rounded",
+    focusable = false,
+    close_events = { "CursorMoved", "CursorMovedI", "InsertCharPre", "WinScrolled" },
+  }, config or {}))
+
+  if winid and vim.api.nvim_win_is_valid(winid) then
+    pcall(vim.api.nvim_win_set_var, winid, "lsp_autoshow_float", true)
+  end
+
+  return bufnr, winid
+end
+
 vim.api.nvim_create_autocmd("LspAttach", {
   callback = function(args)
     local bufnr = args.buf
@@ -45,32 +86,39 @@ vim.api.nvim_create_autocmd("LspAttach", {
     end
 
     map("n", "<leader>lw", function()
-      vim.diagnostic.open_float(nil, {
-        focus = false,
-        border = "rounded",
-        scope = "cursor",
-      })
-    end, "Line diagnostics")
+      vim.g.lsp_autoshow_enabled = not vim.g.lsp_autoshow_enabled
+      if not vim.g.lsp_autoshow_enabled then
+        close_autoshow_floats()
+      end
 
-    -- vim.api.nvim_create_autocmd("CursorHold", {
-    --   buffer = bufnr,
-    --   callback = function()
-    --     local pos = vim.api.nvim_win_get_cursor(0)
-    --     local diags = vim.diagnostic.get(0, { lnum = pos[1] - 1 })
-    --     if #diags > 0 then
-    --       vim.diagnostic.open_float(nil, {
-    --         focus = false,
-    --         border = "rounded",
-    --         source = "always",
-    --         scope = "cursor",
-    --         max_width = 80,
-    --       })
-    --     else
-    --       vim.lsp.buf.hover()
-    --     end
-    --   end,
-    --   desc = "Show diagnostic or hover on idle",
-    -- })
+      vim.notify(
+        ("LSP autoshow %s"):format(vim.g.lsp_autoshow_enabled and "enabled" or "disabled"),
+        vim.log.levels.INFO,
+        { title = "LSP" }
+      )
+    end, "Toggle LSP autoshow")
+
+    vim.api.nvim_create_autocmd("CursorHold", {
+      buffer = bufnr,
+      callback = function()
+        if not vim.g.lsp_autoshow_enabled then
+          return
+        end
+
+        local pos = vim.api.nvim_win_get_cursor(0)
+        local diags = vim.diagnostic.get(0, { lnum = pos[1] - 1 })
+        if #diags > 0 then
+          open_diagnostic_float({
+            source = "always",
+            scope = "cursor",
+            max_width = 80,
+          })
+        else
+          vim.lsp.buf.hover()
+        end
+      end,
+      desc = "Show diagnostic or hover on idle",
+    })
   end,
 })
 
@@ -105,4 +153,3 @@ vim.lsp.enable({
 --     }
 --
 -- })
-
