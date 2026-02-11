@@ -44,25 +44,33 @@ vim.api.nvim_create_autocmd("LspAttach", {
       end, "Toggle inlay hints")
     end
 
-    vim.api.nvim_create_autocmd("CursorHold", {
-      buffer = bufnr,
-      callback = function()
-        local pos = vim.api.nvim_win_get_cursor(0)
-        local diags = vim.diagnostic.get(0, { lnum = pos[1] - 1 })
-        if #diags > 0 then
-          vim.diagnostic.open_float(nil, {
-            focus = false,
-            border = "rounded",
-            source = "always",
-            scope = "cursor",
-            max_width = 80,
-          })
-        else
-          vim.lsp.buf.hover()
-        end
-      end,
-      desc = "Show diagnostic or hover on idle",
-    })
+    map("n", "<leader>lw", function()
+      vim.diagnostic.open_float(nil, {
+        focus = false,
+        border = "rounded",
+        scope = "cursor",
+      })
+    end, "Line diagnostics")
+
+    -- vim.api.nvim_create_autocmd("CursorHold", {
+    --   buffer = bufnr,
+    --   callback = function()
+    --     local pos = vim.api.nvim_win_get_cursor(0)
+    --     local diags = vim.diagnostic.get(0, { lnum = pos[1] - 1 })
+    --     if #diags > 0 then
+    --       vim.diagnostic.open_float(nil, {
+    --         focus = false,
+    --         border = "rounded",
+    --         source = "always",
+    --         scope = "cursor",
+    --         max_width = 80,
+    --       })
+    --     else
+    --       vim.lsp.buf.hover()
+    --     end
+    --   end,
+    --   desc = "Show diagnostic or hover on idle",
+    -- })
   end,
 })
 
@@ -80,5 +88,21 @@ vim.lsp.config("*", {
 vim.lsp.enable({
   "pyright",
   "rust_analyzer",
-  "clangd",
+  -- "clangd",
 })
+
+--
+-- local lspconfig = require("lspconfig")
+--
+-- lspconfig.clangd.setup({
+--   capabilities = capabilities,
+--   cmd = {
+--       "clangd",
+--       "--background-index",
+--       "--clang-tidy",
+--       "--completion-style=detailed",
+--       "--query-driver=/home/shynn/.platformio/packages/**/bin/*",
+--     }
+--
+-- })
+
