@@ -160,4 +160,5 @@ bindkey -M viins '^E' edit-command-line
 bindkey -M vicmd '^E' edit-command-line
 
 
+. "$HOME/.local/bin/env"
 eval "$(zoxide init zsh)"
