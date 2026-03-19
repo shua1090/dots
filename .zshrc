@@ -104,6 +104,12 @@ alias fix='fc -e nvim -1'
 # === Starship ==
 eval "$(starship init zsh)"
 
+# Alias to better versions
+alias ls='eza --icons'
+alias ll='eza -lah --icons'
+alias cat='bat --paging=never'
+
+
 # ==== Syntax Highlighting ===
 # source "$ZSH_PLUGIN_DIR/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 
@@ -153,3 +159,5 @@ zle -N edit-command-line
 bindkey -M viins '^E' edit-command-line
 bindkey -M vicmd '^E' edit-command-line
 
+
+eval "$(zoxide init zsh)"

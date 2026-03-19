@@ -18,6 +18,7 @@ return {
     require("plugins.mason"),
     require("plugins.cmp"),
     require("plugins.codecompanion"),
+    require("plugins.just"),
     require("plugins.aerial"),
     require("plugins.lsp"),
     require("plugins.diagnostics"),
@@ -25,6 +26,7 @@ return {
     require("plugins.lazygit"),
     require("plugins.alpha"),
     require("plugins.neoscroll"),
+    require("plugins.animate"),
     -- require("plugins.precognition")
     require("plugins.rainbow"),
     require("plugins.themify"),

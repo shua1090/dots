@@ -1,21 +1,21 @@
 -- Noctalia dynamic colors (Matugen 2.4.1 Syntax)
 local M = {
-    base00 = '#171e26',          -- Background
-    base01 = '#2f3c4c',   -- Lighter background
-    base02 = '#27323f', -- Selection/Highlight
-    base03 = '#afb2b6',-- Comments
-    base04 = '#f2f2f3',        -- Dark foreground
-    base05 = '#f2f2f3',        -- Default foreground
-    base06 = '#f2f2f3',        -- Light foreground
-    base07 = '#f2f2f3',        -- Bright foreground
-    base08 = '#67a1e4',           -- Variables/Red
-    base09 = '#605cd6',         -- Integers/Orange
-    base0A = '#9d66cc',          -- Classes/Yellow
-    base0B = '#bed7f4',     -- Strings/Green
-    base0C = '#c0bef4',   -- Support/Cyan
-    base0D = '#dbbef4',    -- Functions/Blue
-    base0E = '#67a1e4',           -- Keywords/Magenta
-    base0F = '#605cd6',         -- Deprecated/Brown
+    base00 = '#281515',          -- Background
+    base01 = '#502a2a',   -- Lighter background
+    base02 = '#432323', -- Selection/Highlight
+    base03 = '#b6afaf',-- Comments
+    base04 = '#f3f2f2',        -- Dark foreground
+    base05 = '#f3f2f2',        -- Default foreground
+    base06 = '#f3f2f2',        -- Light foreground
+    base07 = '#f3f2f2',        -- Bright foreground
+    base08 = '#e46767',           -- Variables/Red
+    base09 = '#d6995c',         -- Integers/Orange
+    base0A = '#cccc66',          -- Classes/Yellow
+    base0B = '#f4bebe',     -- Strings/Green
+    base0C = '#f4d9be',   -- Support/Cyan
+    base0D = '#f4f4be',    -- Functions/Blue
+    base0E = '#e46767',           -- Keywords/Magenta
+    base0F = '#d6995c',         -- Deprecated/Brown
 }
 
 return M

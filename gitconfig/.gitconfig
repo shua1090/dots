@@ -1,3 +1,15 @@
+
+[interactive]
+    diffFilter = delta --color-only
+
+[delta]
+    navigate = true  # use n and N to move between diff sections
+    dark = true      # or light = true, or omit for auto-detection
+
+[merge]
+    conflictStyle = zdiff3
+
+
 [alias]
         su = ! git submodule sync --recursive && git submodule  update --init --recursive
 [user]
@@ -27,7 +39,10 @@
 	defaultBranch = main
 [core]
 	editor = nvim
+    pager = delta
 [push]
 	autoSetupRemote = true
 [diff]
 	external = difft
+[url "git@github.com:"]
+	insteadOf = https://github.com/

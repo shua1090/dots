@@ -9,12 +9,16 @@ telescope.setup({
             },
         },
   },
+  extensions = {
+    ["ui-select"] = require("telescope.themes").get_dropdown({}),
+  },
 })
 
 vim.keymap.set("n", "<C-f>", builtin.current_buffer_fuzzy_find, { desc = "Find in buffer (Telescope)" })
 
 -- Project picking
 require("telescope").load_extension("projects")
+require("telescope").load_extension("ui-select")
 
 
 vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "Find files" })

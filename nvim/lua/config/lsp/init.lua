@@ -14,6 +14,27 @@ local function close_autoshow_floats()
   end
 end
 
+local function jump_to_non_floating_window()
+  local alt_win = vim.fn.win_getid(vim.fn.winnr("#"))
+  if alt_win ~= 0 and vim.api.nvim_win_is_valid(alt_win) then
+    local alt_cfg = vim.api.nvim_win_get_config(alt_win)
+    if alt_cfg.relative == "" then
+      vim.api.nvim_set_current_win(alt_win)
+      return
+    end
+  end
+
+  for _, winid in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+    if vim.api.nvim_win_is_valid(winid) then
+      local cfg = vim.api.nvim_win_get_config(winid)
+      if cfg.relative == "" then
+        vim.api.nvim_set_current_win(winid)
+        return
+      end
+    end
+  end
+end
+
 local function open_diagnostic_float(opts)
   local _, winid = vim.diagnostic.open_float(nil, vim.tbl_extend("force", {
     focus = false,
@@ -30,6 +51,7 @@ local base_hover_handler = vim.lsp.handlers.hover
 vim.lsp.handlers["textDocument/hover"] = function(err, result, ctx, config)
   local bufnr, winid = base_hover_handler(err, result, ctx, vim.tbl_extend("force", {
     border = "rounded",
+    focus = false,
     focusable = false,
     close_events = { "CursorMoved", "CursorMovedI", "InsertCharPre", "WinScrolled" },
   }, config or {}))
@@ -40,6 +62,24 @@ vim.lsp.handlers["textDocument/hover"] = function(err, result, ctx, config)
 
   return bufnr, winid
 end
+
+vim.api.nvim_create_autocmd("WinEnter", {
+  callback = function()
+    local winid = vim.api.nvim_get_current_win()
+    local cfg = vim.api.nvim_win_get_config(winid)
+    if cfg.relative == "" then
+      return
+    end
+
+    local ok, is_autoshow = pcall(vim.api.nvim_win_get_var, winid, "lsp_autoshow_float")
+    if not (ok and is_autoshow) then
+      return
+    end
+
+    vim.schedule(jump_to_non_floating_window)
+  end,
+  desc = "Keep cursor out of LSP autoshow floats",
+})
 
 vim.api.nvim_create_autocmd("LspAttach", {
   callback = function(args)
@@ -57,7 +97,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
     -- Info & actions
     -- map("n", "K", vim.lsp.buf.hover, "Hover documentation")
     map("n", "<leader>lR", vim.lsp.buf.rename, "Rename symbol")
-    map("n", "<leader>la", vim.lsp.buf.code_action, "Code actions")
+    map({ "n", "x" }, "<leader>la", vim.lsp.buf.code_action, "Code actions")
     map("n", "<leader>lf", function()
       local clients = vim.lsp.get_clients({ bufnr = bufnr })
       for _, client in ipairs(clients) do
@@ -136,7 +176,7 @@ vim.lsp.config("*", {
 vim.lsp.enable({
   "pyright",
   "rust_analyzer",
-  -- "clangd",
+  "clangd",
 })
 
 --

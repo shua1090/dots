@@ -15,10 +15,58 @@ map("i", "jj", "<Esc>", { desc = "Exit insert mode" })
 -- end, { desc = "Test leader key" })
 --
 
-vim.keymap.set("n", "<C-h>", "<C-w>h", { desc = "Move to left window" })
-vim.keymap.set("n", "<C-j>", "<C-w>j", { desc = "Move to lower window" })
-vim.keymap.set("n", "<C-k>", "<C-w>k", { desc = "Move to upper window" })
-vim.keymap.set("n", "<C-l>", "<C-w>l", { desc = "Move to right window" })
+local function is_floating_window(winid)
+  local cfg = vim.api.nvim_win_get_config(winid)
+  return cfg.relative ~= ""
+end
+
+local function move_to_non_floating_window(direction)
+  local start_win = vim.api.nvim_get_current_win()
+  local wins = vim.api.nvim_tabpage_list_wins(0)
+
+  if #wins <= 1 then
+    return
+  end
+
+  -- If we're currently inside a float, jump to any regular window first.
+  if is_floating_window(start_win) then
+    for _, winid in ipairs(wins) do
+      if vim.api.nvim_win_is_valid(winid) and not is_floating_window(winid) then
+        vim.api.nvim_set_current_win(winid)
+        start_win = winid
+        break
+      end
+    end
+  end
+
+  for _ = 1, #wins do
+    vim.cmd("wincmd " .. direction)
+    if not is_floating_window(vim.api.nvim_get_current_win()) then
+      return
+    end
+  end
+
+  -- Restore if we only cycled through floats.
+  if vim.api.nvim_win_is_valid(start_win) then
+    vim.api.nvim_set_current_win(start_win)
+  end
+end
+
+vim.keymap.set("n", "<C-h>", function()
+  move_to_non_floating_window("h")
+end, { desc = "Move to left window" })
+
+vim.keymap.set("n", "<C-j>", function()
+  move_to_non_floating_window("j")
+end, { desc = "Move to lower window" })
+
+vim.keymap.set("n", "<C-k>", function()
+  move_to_non_floating_window("k")
+end, { desc = "Move to upper window" })
+
+vim.keymap.set("n", "<C-l>", function()
+  move_to_non_floating_window("l")
+end, { desc = "Move to right window" })
 
 pcall(vim.keymap.del, "n", "gw")
 pcall(vim.keymap.del, "x", "gw")
