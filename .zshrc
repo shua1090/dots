@@ -108,7 +108,34 @@ eval "$(starship init zsh)"
 alias ls='eza --icons'
 alias ll='eza -lah --icons'
 alias cat='bat --paging=never'
+alias lg='lazygit'
 
+alias gp='git pull'
+
+gP() {
+  local branch remote_branch remote branch_name
+
+  branch=$(git rev-parse --abbrev-ref HEAD) || return
+  remote_branch=$(git rev-parse --abbrev-ref --symbolic-full-name @{u} 2>/dev/null)
+
+  if [[ -z "$remote_branch" ]]; then
+    remote=origin
+    branch_name=$branch
+  else
+    remote=${remote_branch%%/*}
+    branch_name=${remote_branch#*/}
+  fi
+
+  {
+    local output exit_code
+    output=$(git push "$remote" "$branch_name" 2>&1)
+    exit_code=$?
+
+    if [[ $exit_code -ne 0 ]]; then
+      print -r -- "$output"
+    fi
+  } &!
+}
 
 # ==== Syntax Highlighting ===
 # source "$ZSH_PLUGIN_DIR/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
@@ -162,3 +189,6 @@ bindkey -M vicmd '^E' edit-command-line
 
 . "$HOME/.local/bin/env"
 eval "$(zoxide init zsh)"
+export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
+setopt INTERACTIVE_COMMENTS
+
