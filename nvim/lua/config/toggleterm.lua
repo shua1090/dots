@@ -59,6 +59,7 @@ vim.keymap.set("t", "<C-~>", [[<C-\><C-n><Cmd>1ToggleTerm direction=horizontal<C
 
 vim.keymap.set("n", "<leader><CR>", toggle_float, { desc = "Toggle floating terminal" })
 vim.keymap.set("t", "<leader><CR>", [[<C-\><C-n><Cmd>99ToggleTerm direction=float<CR>]], { desc = "Toggle floating terminal" })
+vim.keymap.set("t", "<Esc><Esc>", [[<C-\><C-n>]], { desc = "Exit terminal mode" })
 
 vim.keymap.set("n", "<leader>Tf", function()
   toggle_float()

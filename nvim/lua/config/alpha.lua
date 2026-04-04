@@ -174,13 +174,28 @@ local config = {
   layout = layout,
   opts = {
     margin = 4,
+    redraw_on_resize = false,
     setup = function()
       local group = vim.api.nvim_create_augroup("AlphaCustomDashboard", { clear = true })
       vim.api.nvim_create_autocmd("DirChanged", {
         pattern = "*",
         group = group,
         callback = function()
-          require("alpha").redraw()
+          -- Only redraw when we are actually on a live alpha buffer.
+          vim.schedule(function()
+            local buf = vim.api.nvim_get_current_buf()
+            if not buf or not vim.api.nvim_buf_is_valid(buf) then
+              return
+            end
+            if vim.bo[buf].filetype ~= "alpha" then
+              return
+            end
+            local ok_alpha, alpha = pcall(require, "alpha")
+            if not ok_alpha then
+              return
+            end
+            pcall(alpha.redraw)
+          end)
         end,
       })
     end,

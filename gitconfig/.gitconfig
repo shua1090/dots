@@ -23,7 +23,9 @@
 [rerere]
         enabled = true
 [alias]
-    # Difftastic aliases, so `git dlog` is `git log` with difftastic and so on.
+    # Difftastic aliases, so `git difft` / `git dlog` / `git dshow` opt in
+    # explicitly without changing the default `git diff` behavior.
+    difft = -c diff.external=difft diff
     dlog = -c diff.external=difft log --ext-diff
     dshow = -c diff.external=difft show --ext-diff
     ddiff = -c diff.external=difft diff
@@ -42,7 +44,5 @@
     pager = delta
 [push]
 	autoSetupRemote = true
-[diff]
-	external = difft
 [url "git@github.com:"]
 	insteadOf = https://github.com/

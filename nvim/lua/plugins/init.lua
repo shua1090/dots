@@ -36,8 +36,8 @@ return {
     -- require("plugins.precognition")
     require("plugins.rainbow"),
     require("plugins.themify"),
-    require("plugins.diffview"),
-    require("plugins.octo"),
+    require("plugins.vgit"),
+    require("plugins.gh"),
     require("plugins.spectre"),
     require("plugins.theme-hub"),
     require("plugins.kitty-scrollback"),
