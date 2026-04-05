@@ -43,7 +43,7 @@ return {
     require("plugins.theme-hub"),
     require("plugins.kitty-scrollback"),
     require("plugins.context_vt"),
-    require("plugins.recall"),
+    require("plugins.arrow"),
     require("plugins.cursorline"),
 
     require("plugins.winmove"),
