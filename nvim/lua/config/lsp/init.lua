@@ -66,30 +66,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
     -- Diagnostics
     map("n", "[d", vim.diagnostic.goto_prev, "Previous diagnostic")
     map("n", "]d", vim.diagnostic.goto_next, "Next diagnostic")
-    map("n", "<leader>lq", builtin.diagnostics, "Diagnostics (workspace)")
-    map("n", "<leader>ls", builtin.lsp_document_symbols, "Document symbols")
     map("n", "<leader>lS", builtin.lsp_workspace_symbols, "Workspace symbols")
-
-    if not vim.b[bufnr].lsp_diag_cursorhold_enabled then
-      vim.api.nvim_create_autocmd("CursorHold", {
-        buffer = bufnr,
-        callback = function()
-          local line = vim.api.nvim_win_get_cursor(0)[1] - 1
-          local diagnostics = vim.diagnostic.get(bufnr, { lnum = line })
-          if #diagnostics == 0 then
-            return
-          end
-
-          vim.diagnostic.open_float(nil, {
-            scope = "cursor",
-            focusable = false,
-            close_events = { "CursorMoved", "CursorMovedI", "InsertCharPre", "BufLeave", "WinLeave" },
-          })
-        end,
-        desc = "Show diagnostics on hold",
-      })
-      vim.b[bufnr].lsp_diag_cursorhold_enabled = true
-    end
 
     if vim.lsp.inlay_hint then
       vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })

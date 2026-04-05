@@ -1,3 +1,27 @@
+local lualine_c = {
+  {
+    "filename",
+    path = 1, -- relative path
+  },
+}
+
+local ok_trouble, trouble = pcall(require, "trouble")
+if ok_trouble then
+  local symbols = trouble.statusline({
+    mode = "lsp_document_symbols",
+    groups = {},
+    title = false,
+    filter = { range = true },
+    format = "{kind_icon}{symbol.name:Normal}",
+    hl_group = "lualine_c_normal",
+  })
+
+  table.insert(lualine_c, {
+    symbols.get,
+    cond = symbols.has,
+  })
+end
+
 require("lualine").setup({
   options = {
     theme = "auto", -- follow your colorscheme
@@ -8,12 +32,7 @@ require("lualine").setup({
   sections = {
     lualine_a = { "mode" },
     lualine_b = { "branch" },
-    lualine_c = {
-      {
-        "filename",
-        path = 1, -- relative path
-      },
-    },
+    lualine_c = lualine_c,
     lualine_x = { "filetype" },
     lualine_y = { "progress" },
     lualine_z = { "location" },

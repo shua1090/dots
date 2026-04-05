@@ -23,7 +23,6 @@ return {
       },
       exclude = {
         filetypes = {
-          "aerial",
           "alpha",
           "help",
           "lazy",

@@ -32,6 +32,8 @@ require("neo-tree").setup({
     window = {
       mappings = {
         ["P"] = { set_project_root_from_node, desc = "Set project root" },
+        ["<C-CR>"] = "open_with_window_picker",
+        ["<C-Enter>"] = "open_with_window_picker",
       },
     },
   },

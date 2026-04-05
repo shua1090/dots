@@ -29,7 +29,6 @@ return {
         GitDelete = { text = "_", highlight = "GitSignsDelete", priority = 6 },
       },
       excluded_filetypes = {
-        "aerial",
         "alpha",
         "lazy",
         "mason",
