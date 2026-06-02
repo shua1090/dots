@@ -24,3 +24,8 @@ vim.keymap.set("n", "<leader>tt", "<Cmd>BufferPick<CR>", { desc = "Pick buffer",
 vim.keymap.set("n", "<leader>tq", "<Cmd>BufferClose<CR>", { desc = "Close buffer", silent = true })
 vim.keymap.set("n", "<leader>tn", "<Cmd>BufferNext<CR>", { desc = "Next buffer", silent = true })
 vim.keymap.set("n", "<leader>tN", "<Cmd>BufferPrevious<CR>", { desc = "Previous buffer", silent = true })
+
+vim.keymap.set({ "n", "i" }, "<C-Tab>", "<Cmd>BufferNext<CR>", { desc = "Next buffer", silent = true })
+vim.keymap.set({ "n", "i" }, "<C-S-Tab>", "<Cmd>BufferPrevious<CR>", { desc = "Previous buffer", silent = true })
+vim.keymap.set("t", "<C-Tab>", [[<C-\><C-n><Cmd>BufferNext<CR>]], { desc = "Next buffer", silent = true })
+vim.keymap.set("t", "<C-S-Tab>", [[<C-\><C-n><Cmd>BufferPrevious<CR>]], { desc = "Previous buffer", silent = true })

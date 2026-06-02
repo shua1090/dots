@@ -5,7 +5,7 @@ require("mason-lspconfig").setup({
     "pyright",
     "rust_analyzer",
     "clangd",
+    "jdtls",
   },
   automatic_installation = true,
 })
-
