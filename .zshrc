@@ -102,6 +102,74 @@ gP() {
   } &!
 }
 
+# === AWS ECR + Docker helpers ===
+export AWS_ACCOUNT_ID="${AWS_ACCOUNT_ID:-992382717039}"
+export AWS_REGION="${AWS_REGION:-us-east-2}"
+
+_aws_ecr_require_env() {
+  if [[ -z "${AWS_ACCOUNT_ID:-}" || -z "${AWS_REGION:-}" ]]; then
+    echo "Set AWS_ACCOUNT_ID and AWS_REGION first."
+    return 1
+  fi
+}
+
+_aws_ecr_registry() {
+  _aws_ecr_require_env || return 1
+  echo "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
+}
+
+_aws_docker_resolve_tag() {
+  local requested_tag="${1:-latest}"
+
+  case "$requested_tag" in
+    ts|timestamp)
+      date +%Y%m%d-%H%M%S
+      ;;
+    git|gitsha|sha)
+      local sha
+      sha=$(git rev-parse --short HEAD 2>/dev/null) || {
+        echo "Not in a git repo (needed for git tag mode)." >&2
+        return 1
+      }
+      echo "$(date +%Y%m%d-%H%M%S)-$sha"
+      ;;
+    *)
+      echo "$requested_tag"
+      ;;
+  esac
+}
+
+aws-docker-auth() {
+  _aws_ecr_require_env || return 1
+  local registry
+  registry=$(_aws_ecr_registry) || return 1
+
+  aws ecr get-login-password --region "$AWS_REGION" \
+    | docker login --username AWS --password-stdin "$registry"
+}
+
+aws-docker-push() {
+  if [[ $# -lt 2 ]]; then
+    echo "Usage: aws-docker-push <repo-name> <local-image[:tag]> [latest|timestamp|git|custom-tag]"
+    return 1
+  fi
+
+  local repo="$1"
+  local local_image="$2"
+  local requested_tag="${3:-latest}"
+  local tag
+  tag=$(_aws_docker_resolve_tag "$requested_tag") || return 1
+
+  _aws_ecr_require_env || return 1
+  local registry ecr_uri
+  registry=$(_aws_ecr_registry) || return 1
+  ecr_uri="$registry/$repo"
+
+  aws-docker-auth || return 1
+  docker tag "$local_image" "$ecr_uri:$tag" || return 1
+  docker push "$ecr_uri:$tag"
+}
+
 # Quick "Worktree" clones
 recl() {
     if [[ $# -ne 2 ]]; then
@@ -160,6 +228,9 @@ eval "$(zoxide init zsh)"
 export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
 setopt INTERACTIVE_COMMENTS
 
+. "$HOME/.atuin/bin/env"
+
+eval "$(atuin init zsh)"
 # ---------------------------
 # Autosuggestions
 # ---------------------------

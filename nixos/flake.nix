@@ -52,7 +52,7 @@
     # Available through 'nixos-rebuild --flake .#your-hostname'
     nixosConfigurations = {
       # FIXME replace with your hostname
-      shua_laptop = nixpkgs.lib.nixosSystem {
+      fedora = nixpkgs.lib.nixosSystem {
         specialArgs = {inherit inputs;};
         modules = [
           # > Our main nixos configuration file <
@@ -65,7 +65,7 @@
     # Available through 'home-manager --flake .#your-username@your-hostname'
     homeConfigurations = {
       # FIXME replace with your username@hostname
-      "shynn@shua_laptop" = home-manager.lib.homeManagerConfiguration {
+      "shynn@fedora" = home-manager.lib.homeManagerConfiguration {
         # Home-manager requires 'pkgs' instance
         pkgs = nixpkgs.legacyPackages.x86_64-linux; # FIXME replace x86_64-linux with your architecture 
         extraSpecialArgs = {inherit inputs;};
