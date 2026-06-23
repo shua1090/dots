@@ -138,12 +138,41 @@ vim.lsp.config("pyright", {
   },
 })
 
+vim.lsp.config("rust_analyzer", {
+  capabilities = capabilities,
+  settings = {
+    ["rust-analyzer"] = {
+      completion = {
+        autoimport = {
+          enable = true,
+        },
+        callable = {
+          snippets = "fill_arguments",
+        },
+        fullFunctionSignatures = {
+          enable = true,
+        },
+        postfix = {
+          enable = true,
+        },
+        termSearch = {
+          enable = true,
+        },
+      },
+      check = {
+        command = "clippy",
+      },
+    },
+  },
+})
+
 vim.lsp.enable({
   "pyright",
   "rust_analyzer",
   "clangd",
   "zls",
   "gopls",
+  "jdtls",
 })
 
 --

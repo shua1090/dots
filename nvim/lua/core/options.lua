@@ -21,6 +21,7 @@ opt.termguicolors = true
 opt.signcolumn = "yes"
 
 opt.clipboard = "unnamedplus"
+opt.autoread = true
 
 -- I don't want mouse enabled
 vim.opt.mouse = ""
@@ -39,6 +40,27 @@ opt.diffopt = {
   "linematch:60",
 }
 opt.fillchars:append({ diff = " " })
+
+vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold" }, {
+  desc = "Reload buffers when files change on disk",
+  callback = function()
+    if vim.fn.mode() ~= "c" then
+      vim.cmd("checktime")
+    end
+  end,
+})
+
+vim.api.nvim_create_autocmd("FileChangedShellPost", {
+  desc = "Notify when a buffer is reloaded from disk",
+  callback = function(args)
+    local name = vim.api.nvim_buf_get_name(args.buf)
+    vim.notify(
+      "Reloaded " .. vim.fn.fnamemodify(name, ":~:."),
+      vim.log.levels.INFO,
+      { title = "File changed on disk" }
+    )
+  end,
+})
 
 -- vim.opt.timeout = true
 -- vim.opt.timeoutlen = 300

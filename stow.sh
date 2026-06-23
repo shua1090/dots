@@ -33,6 +33,8 @@ stow_package_with_backups() {
 stow -t "$HOME" gitconfig vimrc waybar starship
 mkdir -p "$HOME/.config/hypr"
 stow -t "$HOME/.config/hypr" hypr
+mkdir -p "$HOME/.config/niri"
+stow -t "$HOME/.config/niri" niri
 stow -t "$HOME" wofi wlogout wallpapers swaync
 
 if is_macos; then

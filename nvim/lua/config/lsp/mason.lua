@@ -7,6 +7,7 @@ require("mason-lspconfig").setup({
     "clangd",
     "zls",
     "gopls",
+    "jdtls",
   },
   automatic_installation = true,
 })

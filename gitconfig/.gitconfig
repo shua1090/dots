@@ -47,5 +47,6 @@
     pager = delta
 [push]
 	autoSetupRemote = true
+	recurseSubmodules = no
 [url "git@github.com:"]
 	insteadOf = https://github.com/

@@ -22,6 +22,7 @@ if ok_trouble then
   })
 end
 
+local lualine_x = { "filetype" }
 require("lualine").setup({
   options = {
     theme = "auto", -- follow your colorscheme
@@ -33,7 +34,7 @@ require("lualine").setup({
     lualine_a = { "mode" },
     lualine_b = { "branch" },
     lualine_c = lualine_c,
-    lualine_x = { "filetype" },
+    lualine_x = lualine_x,
     lualine_y = { "progress" },
     lualine_z = { "location" },
   },

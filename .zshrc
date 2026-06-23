@@ -1,17 +1,3 @@
-autoload -Uz add-zsh-hook
-
-_deferred_init_done=0
-_deferred_init() {
-  (( _deferred_init_done )) && return
-  _deferred_init_done=1
-
-  # --- Heavy but common ---
-  source "$ZSH_PLUGIN_DIR/zsh-autosuggestions/zsh-autosuggestions.zsh"
-  source "$ZSH_PLUGIN_DIR/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
-}
-
-add-zsh-hook precmd _deferred_init
-
 #  global history
 HISTFILE="$HOME/.zsh_history"
 HISTSIZE=1000
@@ -49,42 +35,21 @@ alias setup_plugins=setup_plugins
 # zsh-autocomplete (must be early)
 # Remove any manual `compinit` calls when using this plugin.
 # ---------------------------
-_defer_autocomplete() {
-  source "$ZSH_PLUGIN_DIR/zsh-autocomplete/zsh-autocomplete.plugin.zsh"
-  add-zsh-hook -d precmd _defer_autocomplete
-}
-add-zsh-hook precmd _defer_autocomplete
+[[ -r "$ZSH_PLUGIN_DIR/zsh-autocomplete/zsh-autocomplete.plugin.zsh" ]] && source "$ZSH_PLUGIN_DIR/zsh-autocomplete/zsh-autocomplete.plugin.zsh"
 
 
 # TODO: clean this up
 export PATH=/home/shynn/.cargo/bin:~/bin/:/home/shynn/tools/radiant/2025.1/bin/lin64:$PATH
+export PATH="/home/shynn/.local/bin:$PATH"
 
 # === NVM ===
 export NVM_DIR="$HOME/.nvm"
-
-_nvm_loaded=0
-load_nvm() {
-  (( _nvm_loaded )) && return
-  _nvm_loaded=1
-  source "$NVM_DIR/nvm.sh"
-}
-
-node() { load_nvm; command node "$@"; }
-npm()  { load_nvm; command npm "$@"; }
-npx()  { load_nvm; command npx "$@"; }
+[[ -s "$NVM_DIR/nvm.sh" ]] && source "$NVM_DIR/nvm.sh"
 
 
 # === SDK MAN ===
 export SDKMAN_DIR="$HOME/.sdkman"
-
-_sdkman_loaded=0
-sdk() {
-  if (( ! _sdkman_loaded )); then
-    _sdkman_loaded=1
-    source "$SDKMAN_DIR/bin/sdkman-init.sh"
-  fi
-  command sdk "$@"
-}
+[[ -s "$SDKMAN_DIR/bin/sdkman-init.sh" ]] && source "$SDKMAN_DIR/bin/sdkman-init.sh"
 
 
 # === Aliases ===
@@ -205,15 +170,21 @@ aws-docker-push() {
   docker push "$ecr_uri:$tag"
 }
 
-# ==== Syntax Highlighting ===
-# source "$ZSH_PLUGIN_DIR/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+# Quick "Worktree" clones
+recl() {
+    if [[ $# -ne 2 ]]; then
+      echo "Error: Exactly 2 arguments are required. You provided $#." >&2
+      return
+    fi
+    print "Recloning ${1:a} -> ${2:a}"
+    read
+    git clone $1 $2
 
-
-# ---------------------------
-# Autosuggestions
-# ---------------------------
-# source "$ZSH_PLUGIN_DIR/zsh-autosuggestions/zsh-autosuggestions.zsh"
-
+    url=$(cd $1 && git remote get-url origin)
+    print "Setting reclone URL to $url. Make sure to ctrl-c if you don't want that."
+    read
+    (cd ${2:a} && git remote set-url origin $url && git pull)
+}
 
 # Save original prompt
 PROMPT_NORMAL=$PROMPT
@@ -242,9 +213,6 @@ function zle-keymap-select {
 zle -N zle-keymap-select
 echo -ne '\e[5 q'
 
-autoload -Uz compinit
-compinit -C
-
 export EDITOR=nvim
 export VISUAL=nvim
 autoload -Uz edit-command-line
@@ -255,7 +223,7 @@ bindkey -M viins '^E' edit-command-line
 bindkey -M vicmd '^E' edit-command-line
 
 
-. "$HOME/.local/bin/env"
+# . "$HOME/.local/bin/env"
 eval "$(zoxide init zsh)"
 export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
 setopt INTERACTIVE_COMMENTS
@@ -263,3 +231,10 @@ setopt INTERACTIVE_COMMENTS
 . "$HOME/.atuin/bin/env"
 
 eval "$(atuin init zsh)"
+# ---------------------------
+# Autosuggestions
+# ---------------------------
+[[ -r "$ZSH_PLUGIN_DIR/zsh-autosuggestions/zsh-autosuggestions.zsh" ]] && source "$ZSH_PLUGIN_DIR/zsh-autosuggestions/zsh-autosuggestions.zsh"
+
+# ==== Syntax Highlighting ===
+[[ -r "$ZSH_PLUGIN_DIR/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]] && source "$ZSH_PLUGIN_DIR/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"

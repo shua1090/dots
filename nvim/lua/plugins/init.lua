@@ -23,8 +23,6 @@ return {
     require("plugins.gitsigns"),
     require("plugins.mason"),
     require("plugins.cmp"),
-    -- require("plugins.avante"),
-    require("plugins.agentic"),
     require("plugins.just"),
     require("plugins.lsp"),
     require("plugins.trouble"),
