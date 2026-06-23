@@ -1,4 +1,5 @@
 local builtin = require("telescope.builtin")
+local util = require("lspconfig.util")
 
 vim.diagnostic.config({
   virtual_text = {
@@ -89,10 +90,60 @@ vim.lsp.config("*", {
   capabilities = capabilities,
 })
 
+vim.lsp.config("pyright", {
+  root_dir = function(bufnr, on_dir)
+    local fname = vim.api.nvim_buf_get_name(bufnr)
+
+    local root = vim.fs.root(fname, {
+      "pyproject.toml",
+      "pyrightconfig.json",
+      "setup.py",
+      "setup.cfg",
+      "requirements.txt",
+      "Pipfile",
+    }) or vim.fs.root(fname, { ".git" })
+
+    vim.notify("pyright root: " .. tostring(root))
+
+    if root then
+      on_dir(root)
+    end
+  end,
+
+  before_init = function(_, config)
+    config.settings = config.settings or {}
+    config.settings.python = config.settings.python or {}
+
+    local root = config.root_dir
+    if not root then
+      return
+    end
+
+    local python = root .. "/.venv/bin/python"
+    vim.notify("pyright python: " .. python)
+
+    if vim.fn.executable(python) == 1 then
+      config.settings.python.pythonPath = python
+    end
+  end,
+
+  settings = {
+    python = {
+      analysis = {
+        autoSearchPaths = true,
+        diagnosticMode = "openFilesOnly",
+        useLibraryCodeForTypes = true,
+      },
+    },
+  },
+})
+
 vim.lsp.enable({
   "pyright",
   "rust_analyzer",
   "clangd",
+  "zls",
+  "gopls",
 })
 
 --

@@ -1,0 +1,217 @@
+#!/usr/bin/env bash
+
+export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
+
+CONFIG_DIR="${CONFIG_DIR:-$HOME/.config/sketchybar}"
+PLUGIN_DIR="$CONFIG_DIR/plugins"
+FONT="${SKETCHYBAR_FONT:-Hack Nerd Font}"
+MAX_WORKSPACES="${SKETCHYBAR_MAX_WORKSPACES:-12}"
+
+source "$CONFIG_DIR/colors.sh"
+
+sketchybar --bar \
+  position=top \
+  height=36 \
+  color=0x00000000 \
+  blur_radius=36 \
+  padding_left=10 \
+  padding_right=10 \
+  margin=0 \
+  sticky=on
+
+default=(
+  updates=when_shown
+  drawing=on
+  background.drawing=off
+  background.height=24
+  background.corner_radius=6
+  background.border_width=1
+  background.border_color="$BORDER"
+  background.color="$ITEM_BG"
+  icon.font="$FONT:Bold:14.0"
+  label.font="$FONT:Medium:11.5"
+  icon.color="$TEXT"
+  label.color="$TEXT"
+  icon.padding_left=7
+  icon.padding_right=5
+  label.padding_left=0
+  label.padding_right=7
+  padding_left=2
+  padding_right=2
+)
+sketchybar --default "${default[@]}"
+
+popup=(
+  popup.align=right
+  popup.height=30
+  popup.y_offset=6
+  popup.blur_radius=36
+  popup.background.color="$GROUP_BG_STRONG"
+  popup.background.corner_radius=8
+  popup.background.border_width=1
+  popup.background.border_color="$BORDER"
+)
+
+popup_item=(
+  background.drawing=off
+  icon.font="$FONT:Bold:13.0"
+  label.font="$FONT:Medium:12.0"
+  icon.color="$SUBTEXT"
+  label.color="$TEXT"
+  icon.padding_left=10
+  icon.padding_right=8
+  label.padding_right=12
+  padding_left=0
+  padding_right=0
+)
+
+sketchybar --add event omniwm_workspace_change
+
+workspace_items=()
+for sid in $(seq 1 "$MAX_WORKSPACES"); do
+  item="omniwm.workspace.$sid"
+  workspace_items+=("$item")
+  sketchybar --add item "$item" left \
+    --set "$item" \
+      icon="$sid" \
+      label.drawing=off \
+      drawing=off \
+      icon.color="$MUTED" \
+      label.color="$MUTED" \
+      icon.padding_left=7 \
+      icon.padding_right=7 \
+      label.padding_left=0 \
+      label.padding_right=7 \
+      click_script="$PLUGIN_DIR/omni_workspaces.sh click $sid"
+done
+
+sketchybar --add bracket omniwm.workspaces "${workspace_items[@]}" \
+  --set omniwm.workspaces \
+    background.color="$GROUP_BG_STRONG" \
+    background.height=26 \
+    background.corner_radius=8 \
+    background.border_width=1 \
+    background.border_color="$BORDER"
+
+sketchybar --add item omniwm.refresh left \
+  --set omniwm.refresh \
+    updates=on \
+    drawing=off \
+    update_freq=10 \
+    script="$PLUGIN_DIR/omni_workspaces.sh refresh" \
+  --subscribe omniwm.refresh system_woke display_change
+
+sketchybar --add item front_app left \
+  --set front_app \
+    icon=󰣆 \
+    label="Desktop" \
+    label.max_chars=28 \
+    scroll_texts=off \
+    background.drawing=off \
+    icon.color="$SUBTEXT" \
+    label.color="$SUBTEXT" \
+    script="$PLUGIN_DIR/front_app.sh" \
+    click_script="omniwmctl command open-command-palette >/dev/null 2>&1 || omniwmctl command open-menu-anywhere >/dev/null 2>&1" \
+  --subscribe front_app front_app_switched
+
+sketchybar --add item clock right \
+  --set clock \
+    update_freq=10 \
+    background.drawing=off \
+    icon=󰥔 \
+    icon.color="$AMBER" \
+    script="$PLUGIN_DIR/clock.sh" \
+    click_script="$PLUGIN_DIR/popup.sh clock" \
+    "${popup[@]}" \
+  --add item clock.popup.date popup.clock \
+  --set clock.popup.date "${popup_item[@]}" icon=󰃭 label="Date" \
+  --add item clock.popup.calendar popup.clock \
+  --set clock.popup.calendar "${popup_item[@]}" icon=󰃭 label="Open Calendar" \
+    click_script="$PLUGIN_DIR/clock.sh calendar; $PLUGIN_DIR/popup.sh clock off"
+
+sketchybar --add item battery right \
+  --set battery \
+    update_freq=60 \
+    background.drawing=off \
+    script="$PLUGIN_DIR/battery.sh" \
+    click_script="$PLUGIN_DIR/popup.sh battery" \
+    "${popup[@]}" \
+  --subscribe battery system_woke power_source_change \
+  --add item battery.popup.status popup.battery \
+  --set battery.popup.status "${popup_item[@]}" icon= label="Battery" \
+  --add item battery.popup.settings popup.battery \
+  --set battery.popup.settings "${popup_item[@]}" icon=󰒓 label="Battery Settings" \
+    click_script="$PLUGIN_DIR/battery.sh settings; $PLUGIN_DIR/popup.sh battery off"
+
+sketchybar --add item bluetooth right \
+  --set bluetooth \
+    update_freq=30 \
+    background.drawing=off \
+    icon=󰂯 \
+    script="$PLUGIN_DIR/bluetooth.sh" \
+    click_script="$PLUGIN_DIR/popup.sh bluetooth" \
+    "${popup[@]}" \
+  --subscribe bluetooth system_woke \
+  --add item bluetooth.popup.status popup.bluetooth \
+  --set bluetooth.popup.status "${popup_item[@]}" icon=󰂯 label="Bluetooth" \
+  --add item bluetooth.popup.toggle popup.bluetooth \
+  --set bluetooth.popup.toggle "${popup_item[@]}" icon=󰐥 label="Toggle Bluetooth" \
+    click_script="$PLUGIN_DIR/bluetooth.sh toggle; $PLUGIN_DIR/popup.sh bluetooth off" \
+  --add item bluetooth.popup.settings popup.bluetooth \
+  --set bluetooth.popup.settings "${popup_item[@]}" icon=󰒓 label="Bluetooth Settings" \
+    click_script="$PLUGIN_DIR/bluetooth.sh settings; $PLUGIN_DIR/popup.sh bluetooth off"
+
+sketchybar --add item wifi right \
+  --set wifi \
+    update_freq=45 \
+    background.drawing=off \
+    icon=󰖩 \
+    label.max_chars=16 \
+    script="$PLUGIN_DIR/wifi.sh" \
+    click_script="$PLUGIN_DIR/popup.sh wifi" \
+    "${popup[@]}" \
+  --subscribe wifi system_woke wifi_change \
+  --add item wifi.popup.status popup.wifi \
+  --set wifi.popup.status "${popup_item[@]}" icon=󰖩 label="Wi-Fi" \
+  --add item wifi.popup.toggle popup.wifi \
+  --set wifi.popup.toggle "${popup_item[@]}" icon=󰐥 label="Toggle Wi-Fi" \
+    click_script="$PLUGIN_DIR/wifi.sh toggle; $PLUGIN_DIR/popup.sh wifi off" \
+  --add item wifi.popup.settings popup.wifi \
+  --set wifi.popup.settings "${popup_item[@]}" icon=󰒓 label="Wi-Fi Settings" \
+    click_script="$PLUGIN_DIR/wifi.sh settings; $PLUGIN_DIR/popup.sh wifi off"
+
+sketchybar --add item volume right \
+  --set volume \
+    background.drawing=off \
+    icon=󰕾 \
+    label="--" \
+    script="$PLUGIN_DIR/volume.sh" \
+    click_script="$PLUGIN_DIR/popup.sh volume" \
+    "${popup[@]}" \
+  --subscribe volume volume_change \
+  --add item volume.popup.status popup.volume \
+  --set volume.popup.status "${popup_item[@]}" icon=󰕾 label="Volume" \
+  --add item volume.popup.settings popup.volume \
+  --set volume.popup.settings "${popup_item[@]}" icon=󰒓 label="Sound Settings" \
+    click_script="$PLUGIN_DIR/volume.sh settings; $PLUGIN_DIR/popup.sh volume off"
+
+sketchybar --add item cpu right \
+  --set cpu \
+    update_freq=6 \
+    background.drawing=off \
+    icon= \
+    script="$PLUGIN_DIR/cpu.sh" \
+    click_script="open -a 'Activity Monitor'"
+
+sketchybar --add bracket system.status cpu volume wifi bluetooth battery clock \
+  --set system.status \
+    background.color="$GROUP_BG_STRONG" \
+    background.height=26 \
+    background.corner_radius=8 \
+    background.border_width=1 \
+    background.border_color="$BORDER"
+
+"$PLUGIN_DIR/omni_watch.sh" start >/dev/null 2>&1 &
+
+sketchybar --trigger omniwm_workspace_change
+sketchybar --update

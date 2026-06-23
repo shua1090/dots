@@ -1,0 +1,23 @@
+# Type: feat, fix, docs, style, refactor, test, chore, ci, build, perf
+#
+# Format:
+# <type>(optional-scope): short summary
+#
+# Examples:
+# feat(auth): add GitHub OAuth login
+# fix(api): handle missing user id
+# docs: update installation instructions
+#
+# Body (optional):
+# - What changed?
+# - Why was it changed?
+# - Any migration notes?
+#
+# Footer (optional):
+# BREAKING CHANGE: explain incompatibility
+# Closes #123
+#
+# --------------------------------------------------
+
+type(scope): summary
+

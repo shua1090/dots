@@ -7,7 +7,6 @@ return {
   opts = {
     show_icons = true,
     leader_key = ";",
-    buffer_leader_key = "m",
   },
   config = function(_, opts)
     require("arrow").setup(opts)

@@ -1,4 +1,7 @@
 
+[commit]
+    template = ~/.gitmessage
+
 [interactive]
     diffFilter = delta --color-only
 
@@ -32,7 +35,7 @@
 
 
 [submodule]
-        recurse = true
+        recurse = false
         fetchJobs = 0
 [fetch]
         recurseSubmodules = on-demand
