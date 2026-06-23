@@ -9,7 +9,7 @@ return {
         timing = animate.gen_timing.linear({ duration = 90, unit = "total" }),
       },
       scroll = {
-        enable = true,
+        enable = false,
         timing = animate.gen_timing.quadratic({ duration = 140, unit = "total" }),
         subscroll = animate.gen_subscroll.equal({ max_output_steps = 80 }),
       },

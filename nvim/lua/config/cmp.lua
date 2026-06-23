@@ -4,7 +4,16 @@ local lspkind = require("lspkind")
 
 vim.opt.completeopt = { "menu", "menuone", "noselect" }
 
+luasnip.config.setup({
+  history = true,
+  region_check_events = "CursorMoved,CursorMovedI",
+  delete_check_events = "InsertLeave",
+})
+
 require("luasnip.loaders.from_vscode").lazy_load()
+require("luasnip.loaders.from_lua").lazy_load({
+  paths = vim.fn.stdpath("config") .. "/lua/snippets",
+})
 require("nvim-autopairs").setup({})
 
 cmp.setup({
@@ -41,8 +50,8 @@ cmp.setup({
     { name = "nvim_lsp" },
     { name = "luasnip" },
     { name = "path" },
-    { name = "rg" },
-    { name = "buffer" },
+    { name = "rg", keyword_length = 4 },
+    { name = "buffer", keyword_length = 3 },
   }),
   window = {
     completion = cmp.config.window.bordered(),

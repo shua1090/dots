@@ -25,7 +25,16 @@ vim.keymap.set("n", "<leader>tq", "<Cmd>BufferClose<CR>", { desc = "Close buffer
 vim.keymap.set("n", "<leader>tn", "<Cmd>BufferNext<CR>", { desc = "Next buffer", silent = true })
 vim.keymap.set("n", "<leader>tN", "<Cmd>BufferPrevious<CR>", { desc = "Previous buffer", silent = true })
 
-vim.keymap.set({ "n", "i" }, "<C-Tab>", "<Cmd>BufferNext<CR>", { desc = "Next buffer", silent = true })
-vim.keymap.set({ "n", "i" }, "<C-S-Tab>", "<Cmd>BufferPrevious<CR>", { desc = "Previous buffer", silent = true })
-vim.keymap.set("t", "<C-Tab>", [[<C-\><C-n><Cmd>BufferNext<CR>]], { desc = "Next buffer", silent = true })
-vim.keymap.set("t", "<C-S-Tab>", [[<C-\><C-n><Cmd>BufferPrevious<CR>]], { desc = "Previous buffer", silent = true })
+local function cycle_buffer(forward)
+  vim.cmd(forward and "BufferNext" or "BufferPrevious")
+end
+
+vim.keymap.set({ "n", "i", "t" }, "<C-Tab>", function()
+  cycle_buffer(true)
+end, { desc = "Next buffer", silent = true })
+vim.keymap.set({ "n", "i", "t" }, "<C-S-Tab>", function()
+  cycle_buffer(false)
+end, { desc = "Previous buffer", silent = true })
+vim.keymap.set({ "n", "i", "t" }, "<C-ISO_Left_Tab>", function()
+  cycle_buffer(false)
+end, { desc = "Previous buffer", silent = true })

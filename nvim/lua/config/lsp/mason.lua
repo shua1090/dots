@@ -6,6 +6,7 @@ require("mason-lspconfig").setup({
     "rust_analyzer",
     "clangd",
     "jdtls",
+    "texlab",
   },
   automatic_installation = true,
 })

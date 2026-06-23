@@ -3,6 +3,8 @@ vim.g.maplocalleader = " "
 
 local opt = vim.opt
 
+opt.exrc = true
+
 opt.number = true
 opt.relativenumber = true
 

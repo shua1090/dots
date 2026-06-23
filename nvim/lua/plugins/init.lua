@@ -24,6 +24,7 @@ return {
     require("plugins.mason"),
     require("plugins.cmp"),
     require("plugins.just"),
+    require("plugins.vimtex"),
     require("plugins.lsp"),
     require("plugins.trouble"),
     require("plugins.diagnostics"),

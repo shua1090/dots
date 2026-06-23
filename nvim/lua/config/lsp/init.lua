@@ -17,6 +17,11 @@ vim.diagnostic.config({
   },
 })
 
+vim.api.nvim_set_hl(0, "DiagnosticUnderlineWarn", {
+  undercurl = true,
+  sp = "#e0af68",
+})
+
 vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
   border = "rounded",
   focusable = false,
@@ -91,6 +96,7 @@ vim.lsp.config("*", {
 
 vim.lsp.config("rust_analyzer", {
   capabilities = capabilities,
+  cmd = { "rustup", "run", "stable", "rust-analyzer" },
   settings = {
     ["rust-analyzer"] = {
       completion = {
@@ -117,11 +123,30 @@ vim.lsp.config("rust_analyzer", {
   },
 })
 
+vim.lsp.config("texlab", {
+  capabilities = capabilities,
+  settings = {
+    texlab = {
+      build = {
+        executable = "pdflatex",
+        args = { "-interaction=nonstopmode", "-synctex=1", "%f" },
+        onSave = false,
+        forwardSearchAfter = false,
+      },
+      chktex = {
+        onOpenAndSave = false,
+        onEdit = false,
+      },
+    },
+  },
+})
+
 vim.lsp.enable({
   "pyright",
   "rust_analyzer",
   "clangd",
   "jdtls",
+  "texlab",
 })
 
 --
