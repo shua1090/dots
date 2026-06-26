@@ -2,7 +2,7 @@
 
 return {
     "folke/which-key.nvim",
-    -- event = "VeryLazy",
+    event = "VeryLazy",
     config = function()
         require("config.which_key")
     end,
