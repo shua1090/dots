@@ -5,7 +5,7 @@ return {
       stages = "fade_in_slide_out",
       timeout = 2800,
       fps = 60,
-      render = "wrapped-compact",
+      render = "compact",
       top_down = false,
       background_colour = "#000000",
       max_width = function()
@@ -34,7 +34,6 @@ return {
         override = {
           ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
           ["vim.lsp.util.stylize_markdown"] = true,
-          ["cmp.entry.get_documentation"] = true, -- requires hrsh7th/nvim-cmp
         },
         hover = {
           enabled = true,

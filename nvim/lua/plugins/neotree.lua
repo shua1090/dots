@@ -9,8 +9,9 @@ return {
   keys = {
     {
       "<leader>e",
-      "<cmd>Neotree filesystem toggle left<cr>",
+      "<cmd>Neotree toggle left<cr>",
       desc = "Explorer (neo-tree)",
+      nowait = true,
     },
   },
   cmd = "Neotree",

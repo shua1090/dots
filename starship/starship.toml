@@ -1,94 +1,82 @@
 # ~/.config/starship.toml
+add_newline = false
 scan_timeout = 20
 command_timeout = 300
-add_newline = false
 
-# Left side: Critical context
 format = """
-$os\
 $directory\
 $git_branch\
-$git_status\
-$git_metrics\
 $git_state\
-$fill\
-$rust\
+$git_status\
+$status\
+$cmd_duration\
 $python\
-$nodejs\
 $line_break\
 $character"""
 
-# Right side: System/Meta info
-right_format = """$cmd_duration$battery$time"""
-
-[fill]
-symbol = ' '
+right_format = ""
 
 [character]
-success_symbol = '[󰄾](bold green)'
-error_symbol = '[󰄾](bold red)'
-vicmd_symbol = '[󰄽](bold purple)'
+success_symbol = "[❯](bold green)"
+error_symbol = "[❯](bold red)"
+vicmd_symbol = "[❮](bold purple)"
 
 [directory]
-style = 'bold cyan'
+style = "bold cyan"
 truncation_length = 3
 truncate_to_repo = true
-read_only = ' 󰌾'
+read_only = " 󰌾"
+format = "[$path]($style)[$read_only]($read_only_style) "
 
 [git_branch]
-symbol = ' '
-style = 'bold purple'
-format = 'on [$symbol$branch]($style) '
+symbol = " "
+style = "bold purple"
+format = "[$symbol$branch]($style) "
+
+[git_state]
+format = "([$state( $progress_current/$progress_total)]($style)) "
+style = "bold yellow"
 
 [git_status]
-style = 'bold red'
-# Use literal single quotes here to avoid TOML escape errors
-format = '([\[$all_status$ahead_behind\]]($style) )'
-stashed = '≡'
-modified = '!'
-untracked = '?'
-deleted = '✘'
-
-[rust]
-symbol = ' '
-style = 'bold #e44d26'
-format = 'via [$symbol($version )]($style)'
-
-[python]
-symbol = ' '
-style = 'bold yellow'
-format = 'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'
-
-[battery]
-full_symbol = '󰁹 '
-charging_symbol = '󰂄 '
-discharging_symbol = '󰂃 '
-[[battery.display]]
-threshold = 30
-style = 'bold red'
-
-[cmd_duration]
-min_time = 500
-format = 'took [󱎫 $duration]($style) '
-style = 'bold yellow'
-
-[time]
-disabled = false
-time_format = '%R'
-style = 'bold #595959'
-format = 'at [$time]($style)'
-
-[os]
-disabled = false
-style = 'bold white'
-
-[os.symbols]
-Macos = '󰀵 '
-Fedora = ' '
-Linux = '󰌽 '
+format = "([$conflicted$renamed$deleted$modified$typechanged$staged$untracked]($style) )"
+style = "bold #8a8f98"
+conflicted = "[=${count}](bold red) "
+renamed = "[»${count}](bold cyan) "
+deleted = "[-${count}](bold red) "
+modified = "[~${count}](bold yellow) "
+typechanged = "[t${count}](bold yellow) "
+staged = "[+${count}](bold green) "
+untracked = "[?${count}](bold blue) "
+ahead = ""
+behind = ""
+diverged = ""
+up_to_date = ""
 
 [git_metrics]
-added_style = "bold green"
-deleted_style = "bold red"
-format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
+disabled = true
+
+[cmd_duration]
+min_time = 1000
+format = "[$duration]($style) "
+style = "bold yellow"
+
+[status]
 disabled = false
+format = "[$symbol$status]($style) "
+symbol = "×"
+style = "bold red"
+map_symbol = false
+
+[python]
+symbol = " "
+style = "bold yellow"
+format = "[(\\($virtualenv\\) )]($style)"
+
+[battery]
+disabled = true
+
+[time]
+disabled = true
+
+[os]
+disabled = true

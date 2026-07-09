@@ -10,5 +10,5 @@ require("mason-lspconfig").setup({
     "jdtls",
     "texlab",
   },
-  automatic_installation = true,
+  automatic_enable = false,
 })

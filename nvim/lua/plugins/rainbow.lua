@@ -23,16 +23,16 @@ return {
       },
       exclude = {
         filetypes = {
-          "alpha",
-          "help",
-          "lazy",
-          "mason",
-          "neo-tree",
-          "noice",
-          "notify",
-          "TelescopePrompt",
-          "terminal",
-        },
+            "alpha",
+            "help",
+            "lazy",
+            "mason",
+            "neo-tree",
+            "noice",
+            "notify",
+            "snacks_dashboard",
+            "terminal",
+          },
       },
     }
 

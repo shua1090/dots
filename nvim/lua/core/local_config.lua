@@ -1,7 +1,20 @@
 local function source_local_config()
+  local arg = vim.fn.argv(0)
+  local search_path = vim.fn.getcwd()
+
+  if arg and arg ~= "" then
+    local arg_path = vim.fn.fnamemodify(arg, ":p")
+    local stat = vim.uv.fs_stat(arg_path)
+    if stat and stat.type == "directory" then
+      search_path = arg_path
+    elseif stat and stat.type == "file" then
+      search_path = vim.fs.dirname(arg_path)
+    end
+  end
+
   local matches = vim.fs.find(".nvim.lua", {
     upward = true,
-    path = vim.fn.getcwd(),
+    path = search_path,
     type = "file",
   })
   local path = matches[1]

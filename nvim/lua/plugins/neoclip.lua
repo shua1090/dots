@@ -1,8 +1,6 @@
 return {
   "AckslD/nvim-neoclip.lua",
-  dependencies = {
-    "nvim-telescope/telescope.nvim",
-  },
+  event = "VeryLazy",
   config = function()
     require("neoclip").setup({
       history = 1000,
@@ -11,13 +9,12 @@ return {
       default_register = { '"', "+", "*" },
       initial_mode = "normal",
     })
-    pcall(require("telescope").load_extension, "neoclip")
   end,
   keys = {
     {
       "<leader>v",
       function()
-        require("telescope").extensions.neoclip.default()
+        require("neoclip.fzf")()
       end,
       desc = "Clipboard history",
     },

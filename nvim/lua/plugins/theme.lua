@@ -4,7 +4,7 @@ return {
   priority = 1000,
   config = function()
     require("onedark").setup({
-      style = "deep",
+      style = "darker",
     })
 
     local styles = {
