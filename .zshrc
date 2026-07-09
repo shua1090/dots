@@ -22,34 +22,132 @@ bindkey -M vicmd '^O' accept-and-hold
 
 ZSH_PLUGIN_DIR="$HOME/.zsh/plugins"
 
-setup_plugins() {
+function setup_plugins() {
   mkdir -p "$ZSH_PLUGIN_DIR"
-  timeout 5 git clone --depth 1 https://github.com/marlonrichert/zsh-autocomplete.git "$ZSH_PLUGIN_DIR/zsh-autocomplete" || echo "autcomplete clone failed"
+  timeout 5 git clone --depth 1 https://github.com/marlonrichert/zsh-autocomplete.git "$ZSH_PLUGIN_DIR/zsh-autocomplete" || echo "autocomplete clone failed"
   timeout 5 git clone --depth 1 https://github.com/zsh-users/zsh-syntax-highlighting.git "$ZSH_PLUGIN_DIR/zsh-syntax-highlighting" || echo "syntax highlighting clone failed"
-  timeout 5 git clone --depth 1 https://github.com/zsh-users/zsh-autosuggestions.git "$ZSH_PLUGIN_DIR/zsh-autosuggestions"  || echo "autosuggestion clone failed"
+  timeout 5 git clone --depth 1 https://github.com/zsh-users/zsh-autosuggestions.git "$ZSH_PLUGIN_DIR/zsh-autosuggestions" || echo "autosuggestion clone failed"
 }
 
-alias setup_plugins=setup_plugins
-
 # ---------------------------
-# zsh-autocomplete (must be early)
-# Remove any manual `compinit` calls when using this plugin.
+# zsh-autocomplete is expensive on large shells; keep it opt-in.
 # ---------------------------
-[[ -r "$ZSH_PLUGIN_DIR/zsh-autocomplete/zsh-autocomplete.plugin.zsh" ]] && source "$ZSH_PLUGIN_DIR/zsh-autocomplete/zsh-autocomplete.plugin.zsh"
+if [[ -n "${ENABLE_ZSH_AUTOCOMPLETE:-}" && -r "$ZSH_PLUGIN_DIR/zsh-autocomplete/zsh-autocomplete.plugin.zsh" ]]; then
+  source "$ZSH_PLUGIN_DIR/zsh-autocomplete/zsh-autocomplete.plugin.zsh"
+fi
 
 
-# TODO: clean this up
-export PATH=/home/shynn/.cargo/bin:~/bin/:/home/shynn/tools/radiant/2025.1/bin/lin64:$PATH
-export PATH="/home/shynn/.local/bin:$PATH"
+typeset -U path PATH
+path=(
+  "$HOME/.local/bin"
+  "$HOME/.cargo/bin"
+  "$HOME/bin"
+  "$HOME/tools/radiant/2025.1/bin/lin64"
+  $path
+)
+
+_lazy_source_shell_tool() {
+  local marker="$1"
+  local init_file="$2"
+  shift 2
+
+  if [[ -n "${parameters[$marker]:-}" && -o interactive ]]; then
+    unset -f "$@"
+    [[ -r "$init_file" ]] && source "$init_file"
+  fi
+}
+
+_load_nvm() {
+  _lazy_source_shell_tool NVM_DIR "$NVM_DIR/nvm.sh" nvm node npm npx yarn pnpm corepack
+}
+
+nvm() { _load_nvm; nvm "$@"; }
+node() { _load_nvm; node "$@"; }
+npm() { _load_nvm; npm "$@"; }
+npx() { _load_nvm; npx "$@"; }
+yarn() { _load_nvm; yarn "$@"; }
+pnpm() { _load_nvm; pnpm "$@"; }
+corepack() { _load_nvm; corepack "$@"; }
 
 # === NVM ===
 export NVM_DIR="$HOME/.nvm"
-[[ -s "$NVM_DIR/nvm.sh" ]] && source "$NVM_DIR/nvm.sh"
+autoload -Uz is-at-least
+if (( $+commands[nvm] == 0 )); then
+  nvm() {
+    unset -f nvm node npm npx yarn pnpm corepack
+    [[ -s "$NVM_DIR/nvm.sh" ]] && source "$NVM_DIR/nvm.sh"
+    nvm "$@"
+  }
+
+  node() {
+    unset -f nvm node npm npx yarn pnpm corepack
+    [[ -s "$NVM_DIR/nvm.sh" ]] && source "$NVM_DIR/nvm.sh"
+    node "$@"
+  }
+
+  npm() {
+    unset -f nvm node npm npx yarn pnpm corepack
+    [[ -s "$NVM_DIR/nvm.sh" ]] && source "$NVM_DIR/nvm.sh"
+    npm "$@"
+  }
+
+  npx() {
+    unset -f nvm node npm npx yarn pnpm corepack
+    [[ -s "$NVM_DIR/nvm.sh" ]] && source "$NVM_DIR/nvm.sh"
+    npx "$@"
+  }
+
+  yarn() {
+    unset -f nvm node npm npx yarn pnpm corepack
+    [[ -s "$NVM_DIR/nvm.sh" ]] && source "$NVM_DIR/nvm.sh"
+    yarn "$@"
+  }
+
+  pnpm() {
+    unset -f nvm node npm npx yarn pnpm corepack
+    [[ -s "$NVM_DIR/nvm.sh" ]] && source "$NVM_DIR/nvm.sh"
+    pnpm "$@"
+  }
+
+  corepack() {
+    unset -f nvm node npm npx yarn pnpm corepack
+    [[ -s "$NVM_DIR/nvm.sh" ]] && source "$NVM_DIR/nvm.sh"
+    corepack "$@"
+  }
+fi
 
 
 # === SDK MAN ===
 export SDKMAN_DIR="$HOME/.sdkman"
-[[ -s "$SDKMAN_DIR/bin/sdkman-init.sh" ]] && source "$SDKMAN_DIR/bin/sdkman-init.sh"
+sdk() {
+  unset -f sdk java javac gradle mvn
+  [[ -s "$SDKMAN_DIR/bin/sdkman-init.sh" ]] && source "$SDKMAN_DIR/bin/sdkman-init.sh"
+  sdk "$@"
+}
+
+java() {
+  unset -f sdk java javac gradle mvn
+  [[ -s "$SDKMAN_DIR/bin/sdkman-init.sh" ]] && source "$SDKMAN_DIR/bin/sdkman-init.sh"
+  java "$@"
+}
+
+javac() {
+  unset -f sdk java javac gradle mvn
+  [[ -s "$SDKMAN_DIR/bin/sdkman-init.sh" ]] && source "$SDKMAN_DIR/bin/sdkman-init.sh"
+  javac "$@"
+}
+
+gradle() {
+  unset -f sdk java javac gradle mvn
+  [[ -s "$SDKMAN_DIR/bin/sdkman-init.sh" ]] && source "$SDKMAN_DIR/bin/sdkman-init.sh"
+  gradle "$@"
+}
+
+mvn() {
+  unset -f sdk java javac gradle mvn
+  [[ -s "$SDKMAN_DIR/bin/sdkman-init.sh" ]] && source "$SDKMAN_DIR/bin/sdkman-init.sh"
+  mvn "$@"
+}
 
 
 # === Aliases ===

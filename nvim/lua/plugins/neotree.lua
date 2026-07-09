@@ -6,10 +6,15 @@ return {
     "nvim-tree/nvim-web-devicons", -- optional but recommended
     "MunifTanjim/nui.nvim",
   },
-  lazy = false,
+  keys = {
+    {
+      "<leader>e",
+      "<cmd>Neotree filesystem toggle left<cr>",
+      desc = "Explorer (neo-tree)",
+    },
+  },
   cmd = "Neotree",
   config = function()
     require("config.neotree")
   end,
 }
-

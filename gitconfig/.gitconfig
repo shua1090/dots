@@ -45,6 +45,7 @@
 [core]
 	editor = nvim
     pager = delta
+    excludesFile = ~/.global-gitignore
 [push]
 	autoSetupRemote = true
 	recurseSubmodules = no

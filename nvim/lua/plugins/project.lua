@@ -1,10 +1,8 @@
 return {
   "ahmedkhalf/project.nvim",
-  lazy = false, -- REQUIRED: must load before VimEnter
-  priority = 100, -- load early, but after colorscheme
+  event = "VeryLazy",
   config = function()
       require("config.project")
   end,
 }
-
 

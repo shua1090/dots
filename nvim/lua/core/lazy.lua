@@ -15,8 +15,9 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup("plugins", {
-  rocks = {
-    enabled = true,
-    hererocks = true, -- automatically install Lua + LuaRocks
+  performance = {
+    cache = {
+      enabled = true,
+    },
   },
 })

@@ -52,16 +52,11 @@ end
 local function project_button(shortcut, label, path)
   local full_path = expand_path(path)
   local exists = uv.fs_stat(full_path) ~= nil
-  local lua_path = full_path:gsub("\\", "\\\\"):gsub("'", "\\'")
   local cd_path = vim.fn.fnameescape(full_path)
 
   local command
   if exists then
-    command = string.format(
-      "<cmd>cd %s | lua require('telescope.builtin').find_files({ cwd = '%s' })<CR>",
-      cd_path,
-      lua_path
-    )
+    command = string.format("<cmd>cd %s | Telescope find_files<CR>", cd_path)
   else
     command = string.format("<cmd>echo 'Path not found: %s'<CR>", full_path)
   end
@@ -145,8 +140,8 @@ local quick_links = {
     { type = "text", val = "Quick links", opts = { hl = "SpecialComment", position = "center" } },
     { type = "padding", val = 1 },
     dashboard.button("e", "  New file", "<cmd>ene<CR>"),
-    dashboard.button("SPC f f", "󰈞  Find file"),
-    dashboard.button("SPC f g", "󰊄  Live grep"),
+    dashboard.button("SPC f f", "󰈞  Find file", "<cmd>Telescope find_files<CR>"),
+    dashboard.button("SPC f g", "󰊄  Live grep", "<cmd>Telescope live_grep<CR>"),
     dashboard.button("u", "  Update plugins", "<cmd>Lazy sync<CR>"),
     dashboard.button("q", "󰅚  Quit", "<cmd>qa<CR>"),
   },

@@ -1,5 +1,6 @@
 return {
   "romgrk/barbar.nvim",
+  event = "BufReadPost",
   dependencies = {
     "lewis6991/gitsigns.nvim",
     "nvim-tree/nvim-web-devicons",

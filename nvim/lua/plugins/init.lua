@@ -12,11 +12,6 @@ return {
     require("plugins.window_picker"),
     require("plugins.lualine"),
     require("plugins.theme"),
-    require("plugins.theme-catppuccin"),
-    require("plugins.theme-kanagawa"),
-    require("plugins.theme-nightfox"),
-    require("plugins.theme-rose-pine"),
-    require("plugins.theme-onedark"),
     require("plugins.toggleterm"),
     require("plugins.project"),
     -- require("plugins.image"),init.lua
@@ -35,11 +30,9 @@ return {
     require("plugins.animate"),
     -- require("plugins.precognition")
     require("plugins.rainbow"),
-    require("plugins.themify"),
     require("plugins.vgit"),
     require("plugins.gh"),
     require("plugins.spectre"),
-    require("plugins.theme-hub"),
     require("plugins.kitty-scrollback"),
     require("plugins.context_vt"),
     require("plugins.arrow"),

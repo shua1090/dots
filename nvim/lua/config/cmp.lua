@@ -6,7 +6,6 @@ vim.opt.completeopt = { "menu", "menuone", "noselect" }
 
 luasnip.config.setup({
   history = true,
-  region_check_events = "CursorMoved,CursorMovedI",
   delete_check_events = "InsertLeave",
 })
 
@@ -50,7 +49,6 @@ cmp.setup({
     { name = "nvim_lsp" },
     { name = "luasnip" },
     { name = "path" },
-    { name = "rg", keyword_length = 4 },
     { name = "buffer", keyword_length = 3 },
   }),
   window = {
@@ -67,7 +65,6 @@ cmp.setup({
         nvim_lsp = "[LSP]",
         luasnip = "[Snip]",
         path = "[Path]",
-        rg = "[Rg]",
         buffer = "[Buf]",
         cmdline = "[Cmd]",
       },
