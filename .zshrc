@@ -1,3 +1,9 @@
+# Ghostty auto-injects zsh integration for the first shell it launches.
+# Source it here too so nested zsh sessions keep prompt/cwd integration.
+if [[ -o interactive && -n "${GHOSTTY_RESOURCES_DIR:-}" && -r "${GHOSTTY_RESOURCES_DIR}/shell-integration/zsh/ghostty-integration" ]]; then
+  source "${GHOSTTY_RESOURCES_DIR}/shell-integration/zsh/ghostty-integration"
+fi
+
 #  global history
 HISTFILE="$HOME/.zsh_history"
 HISTSIZE=1000
@@ -296,6 +302,15 @@ fi
 
 (( $+commands[bat] )) && alias cat='bat --paging=never'
 (( $+commands[lazygit] )) && alias lg='lazygit'
+
+ghostty-shader() {
+  "$HOME/.config/ghostty/bin/ghostty-shader" "$@"
+}
+alias ghostty-plain='ghostty-shader none'
+alias ghostty-retro='ghostty-shader retro'
+alias ghostty-tft='ghostty-shader tft'
+alias ghostty-retro-tft='ghostty-shader retro-tft'
+alias ghostty-retro-bloom='ghostty-shader retro-tft-bloom'
 
 _zsh_set_cursor_for_keymap() {
   case "$KEYMAP" in

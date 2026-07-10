@@ -16,6 +16,12 @@ stow_package_with_backups() {
     relative_path="${source_file#"$package"/}"
     target_file="$target/$relative_path"
 
+    if [ -e "$target_file" ] && command -v realpath >/dev/null 2>&1; then
+      if [ "$(realpath "$source_file")" = "$(realpath "$target_file")" ]; then
+        continue
+      fi
+    fi
+
     if [ -e "$target_file" ] && [ ! -L "$target_file" ]; then
       mkdir -p "$backup_root/$(dirname "$relative_path")"
       mv "$target_file" "$backup_root/$relative_path"
@@ -33,8 +39,7 @@ stow -t "$HOME" gitconfig
 
 # stow -t ~ gitconfig vimrc waybar starship
 # stow -t ~/.config/hypr hypr
-mkdir -p "$HOME/.config/kitty"
-stow -t "$HOME/.config/kitty" kitty
+stow_package_with_backups ghostty "$HOME/.config/ghostty"
 mkdir -p "$HOME/.config/nvim"
 stow -t "$HOME/.config/nvim" nvim
 

@@ -6,7 +6,7 @@ sudo dnf install \
     git git-lfs gitui zsh fzf\
     hyprland wofi waybar wlogout swaync swww clipman wl-clipboard grim slurp\
     \
-    brave-browser kitty \
+    brave-browser ghostty \
     \
     stow \
     \
