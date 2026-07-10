@@ -1,0 +1,56 @@
+# Ported from kitty/kitty.conf.
+
+command = /usr/bin/zsh
+
+font-family = JetBrainsMono Nerd Font
+font-size = 16
+
+config-file = themes/current-theme
+background-opacity = 0.95
+background-opacity-cells = true
+
+window-decoration = auto
+window-theme = ghostty
+gtk-titlebar = true
+gtk-titlebar-style = native
+gtk-toolbar-style = flat
+gtk-wide-tabs = false
+# Bottom/top tabs in Ghostty are native GTK UI; keep them hidden for a
+# kitty-like window and use Ctrl+Shift+O for tab overview instead.
+window-show-tab-bar = never
+window-titlebar-background = #161827
+window-titlebar-foreground = #f2f2f3
+window-padding-x = 0
+window-padding-y = 0
+
+confirm-close-surface = false
+bell-features = audio,attention,title,no-border
+
+# Ghostty uses a byte limit instead of kitty's scrollback_lines.
+scrollback-limit = 2000000
+mouse-scroll-multiplier = precision:1,discrete:1
+
+# Keep Ghostty's cwd/prompt/title integration, but leave cursor shape to .zshrc.
+shell-integration = zsh
+shell-integration-features = no-cursor,title,no-sudo,no-ssh-env,no-ssh-terminfo,path
+window-inherit-working-directory = true
+
+# Browser-style tab controls, shifted so Ctrl+T/Ctrl+O/Ctrl+W still reach
+# terminal apps such as zellij, tio, shells, and editors.
+keybind = ctrl+shift+t=new_tab
+keybind = ctrl+shift+o=toggle_tab_overview
+keybind = ctrl+shift+w=close_tab:this
+keybind = ctrl+tab=next_tab
+keybind = ctrl+shift+tab=previous_tab
+
+# Kitty's new_os_window_with_cwd.
+keybind = ctrl+n=new_window
+
+# Kitty's new_window_with_cwd is closest to a Ghostty split.
+keybind = ctrl+shift+enter=new_split:right
+
+# kitty-scrollback.nvim depends on kitty kittens and remote control.
+# These are the closest Ghostty built-ins, but they do not open the
+# scrollback through kitty-scrollback.nvim.
+keybind = ctrl+shift+h=write_scrollback_file:open
+keybind = ctrl+shift+g=write_screen_file:open

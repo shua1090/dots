@@ -3,10 +3,10 @@
 sudo dnf copr enable alebastr/sway-extras -y
 
 sudo dnf install \
-    git git-lfs gitui zsh\
+    git git-lfs gitui zsh fzf\
     hyprland wofi waybar wlogout swaync swww clipman wl-clipboard grim slurp\
     \
-    brave-browser kitty \
+    brave-browser ghostty \
     \
     stow \
     \
@@ -17,7 +17,7 @@ sudo dnf install \
     golang rust cargo \
     \
     openssl-devel alsa-lib-devel dbus-devel \
-    sh-autosuggestions zsh-syntax-highlighting \
+    zsh-autosuggestions
 
 
 flatpak install flathub com.spotify.Client

@@ -21,6 +21,12 @@ stow_package_with_backups() {
     relative_path="${source_file#"$package"/}"
     target_file="$target/$relative_path"
 
+    if [ -e "$target_file" ] && command -v realpath >/dev/null 2>&1; then
+      if [ "$(realpath "$source_file")" = "$(realpath "$target_file")" ]; then
+        continue
+      fi
+    fi
+
     if [ -e "$target_file" ] && [ ! -L "$target_file" ]; then
       mkdir -p "$backup_root/$(dirname "$relative_path")"
       mv "$target_file" "$backup_root/$relative_path"
@@ -35,6 +41,7 @@ mkdir -p "$HOME/.config/hypr"
 stow -t "$HOME/.config/hypr" hypr
 mkdir -p "$HOME/.config/niri"
 stow -t "$HOME/.config/niri" niri
+stow_package_with_backups ghostty "$HOME/.config/ghostty"
 stow -t "$HOME" wofi wlogout wallpapers swaync
 
 if is_macos; then

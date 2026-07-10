@@ -34,7 +34,7 @@ return {
         "mason",
         "neo-tree",
         "noice",
-        "TelescopePrompt",
+        "snacks_dashboard",
       },
     },
   },

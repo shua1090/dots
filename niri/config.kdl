@@ -332,6 +332,15 @@ window-rule {
     default-column-width {}
 }
 
+window-rule {
+    // Match Brave's Picture in Picture window
+    match app-id="" title="^Picture in picture$"
+    // Force it to float
+    open-floating true
+    // Keep it on top of other windows
+    // (You can also use a keybind in niri to toggle this manually)
+}
+
 // Open the Firefox picture-in-picture player as floating by default.
 window-rule {
     // This app-id regular expression will work for both:
@@ -377,7 +386,7 @@ binds {
     Mod+Shift+Slash { show-hotkey-overlay; }
 
     // Suggested binds for running programs and shell controls.
-    Mod+Return hotkey-overlay-title="Open a Terminal: kitty" { spawn "kitty"; }
+    Mod+Return hotkey-overlay-title="Open a Terminal: ghostty" { spawn "ghostty"; }
     Mod+D hotkey-overlay-title="Noctalia Launcher" { spawn-sh "qs -c noctalia-shell ipc call launcher toggle"; }
     Mod+E { spawn "nautilus"; }
     Mod+B { spawn "brave-browser"; }
@@ -624,6 +633,7 @@ binds {
 
     // Move the focused window between the floating and the tiling layout.
     Mod+V       { toggle-window-floating; }
+    Mod+Ctrl+Shift+F { toggle-windowed-fullscreen; }
     Mod+Space   { toggle-window-floating; }
     Mod+Shift+V { spawn "clipman" "pick" "-t" "wofi"; }
     Mod+Ctrl+V { switch-focus-between-floating-and-tiling; }

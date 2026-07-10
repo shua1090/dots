@@ -45,8 +45,15 @@ opt.fillchars:append({ diff = " " })
 
 vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold" }, {
   desc = "Reload buffers when files change on disk",
-  callback = function()
+  callback = function(args)
     if vim.fn.mode() ~= "c" then
+      if args.event == "BufEnter" then
+        if vim.bo[args.buf].buftype == "" then
+          vim.cmd.checktime(args.buf)
+        end
+        return
+      end
+
       vim.cmd("checktime")
     end
   end,
@@ -64,6 +71,5 @@ vim.api.nvim_create_autocmd("FileChangedShellPost", {
   end,
 })
 
--- vim.opt.timeout = true
--- vim.opt.timeoutlen = 300
---
+opt.timeout = true
+opt.timeoutlen = 400

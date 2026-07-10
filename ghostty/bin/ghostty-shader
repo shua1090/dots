@@ -1,0 +1,67 @@
+#!/usr/bin/env sh
+set -eu
+
+config_dir="${XDG_CONFIG_HOME:-$HOME/.config}/ghostty"
+presets_dir="$config_dir/shaders/presets"
+
+usage() {
+  printf 'Usage: ghostty-shader [list|none|retro|tft|retro-tft|retro-tft-bloom]\n'
+}
+
+list_presets() {
+  for preset_file in "$presets_dir"/*.conf; do
+    [ -e "$preset_file" ] || return 0
+    basename "$preset_file" .conf
+  done | sort
+}
+
+case "${1:-list}" in
+  list)
+    list_presets
+    ;;
+  -h|--help|help)
+    usage
+    ;;
+  *)
+    preset="$1"
+    shift
+    preset_file="$presets_dir/$preset.conf"
+
+    if [ "$#" -ne 0 ]; then
+      usage >&2
+      exit 1
+    fi
+
+    if [ ! -r "$preset_file" ]; then
+      printf 'Unknown Ghostty shader preset: %s\n\n' "$preset" >&2
+      usage >&2
+      printf '\nAvailable presets:\n' >&2
+      list_presets >&2
+      exit 1
+    fi
+
+    set -- ghostty \
+      --gtk-single-instance=false \
+      --working-directory="$PWD" \
+      --title="ghostty: $preset"
+
+    while IFS= read -r line; do
+      case "$line" in
+        "custom-shader = "*)
+          shader_path="${line#custom-shader = }"
+          set -- "$@" "--custom-shader=$config_dir/$shader_path"
+          ;;
+        "custom-shader-animation = "*)
+          shader_animation="${line#custom-shader-animation = }"
+          set -- "$@" "--custom-shader-animation=$shader_animation"
+          ;;
+      esac
+    done < "$preset_file"
+
+    if [ "${GHOSTTY_SHADER_FOREGROUND:-}" = "1" ]; then
+      exec "$@"
+    fi
+
+    "$@" >/dev/null 2>&1 &
+    ;;
+esac

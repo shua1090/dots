@@ -5,6 +5,7 @@ local sign_prefix = "UserMark_"
 local sign_hl = "UserMarkSign"
 local defined_signs = {}
 local placed_marks = {}
+local pending_refresh = {}
 
 local function is_real_buffer(bufnr)
   return vim.api.nvim_buf_is_valid(bufnr)
@@ -122,6 +123,21 @@ function M.refresh(bufnr)
   end
 end
 
+local function schedule_refresh(bufnr)
+  bufnr = bufnr or vim.api.nvim_get_current_buf()
+  if pending_refresh[bufnr] then
+    return
+  end
+
+  pending_refresh[bufnr] = true
+  vim.defer_fn(function()
+    pending_refresh[bufnr] = nil
+    if vim.api.nvim_buf_is_valid(bufnr) then
+      M.refresh(bufnr)
+    end
+  end, 120)
+end
+
 function M.setup()
   vim.cmd("highlight default link " .. sign_hl .. " DiagnosticHint")
 
@@ -132,11 +148,10 @@ function M.setup()
     "CursorHold",
     "FocusGained",
     "TextChanged",
-    "TextChangedI",
   }, {
     group = augroup,
     callback = function(event)
-      M.refresh(event.buf)
+      schedule_refresh(event.buf)
     end,
   })
 
@@ -144,14 +159,14 @@ function M.setup()
     group = augroup,
     pattern = ":",
     callback = function()
-      M.refresh()
+      schedule_refresh()
     end,
   })
 
   vim.api.nvim_create_autocmd("SafeState", {
     group = augroup,
     callback = function()
-      M.refresh()
+      schedule_refresh()
     end,
   })
 
@@ -159,6 +174,7 @@ function M.setup()
     group = augroup,
     callback = function(event)
       placed_marks[event.buf] = nil
+      pending_refresh[event.buf] = nil
     end,
   })
 

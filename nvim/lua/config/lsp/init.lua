@@ -1,5 +1,8 @@
-local builtin = require("telescope.builtin")
-local util = require("lspconfig.util")
+local function fzf_lsp(method, opts)
+  return function()
+    require("fzf-lua")[method](opts or {})
+  end
+end
 
 vim.diagnostic.config({
   virtual_text = {
@@ -23,12 +26,18 @@ vim.api.nvim_set_hl(0, "DiagnosticUnderlineWarn", {
   sp = "#e0af68",
 })
 
-vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
+local function with(handler, opts)
+  return function(err, result, ctx, config)
+    return handler(err, result, ctx, vim.tbl_deep_extend("force", config or {}, opts))
+  end
+end
+
+vim.lsp.handlers["textDocument/hover"] = with(vim.lsp.handlers.hover, {
   border = "rounded",
   focusable = false,
 })
 
-vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
+vim.lsp.handlers["textDocument/signatureHelp"] = with(vim.lsp.handlers.signature_help, {
   border = "rounded",
   focusable = false,
 })
@@ -41,10 +50,10 @@ vim.api.nvim_create_autocmd("LspAttach", {
     end
 
     -- Navigation
-    map("n", "<leader>ld", builtin.lsp_definitions, "Go to definition")
+    map("n", "<leader>ld", fzf_lsp("lsp_definitions", { jump1 = true, ignore_current_line = true }), "Go to definition")
     map("n", "<leader>lD", vim.lsp.buf.declaration, "Go to declaration")
-    map("n", "<leader>li", builtin.lsp_implementations, "Go to implementation")
-    map("n", "<leader>lr", builtin.lsp_references, "Find references")
+    map("n", "<leader>li", fzf_lsp("lsp_implementations", { jump1 = true, ignore_current_line = true }), "Go to implementation")
+    map("n", "<leader>lr", fzf_lsp("lsp_references", { jump1 = true, ignore_current_line = true }), "Find references")
 
     -- Info & actions
     map("n", "K", vim.lsp.buf.hover, "Hover documentation")
@@ -57,7 +66,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
       })
     end, "Show diagnostics at cursor")
     map("n", "<leader>lR", vim.lsp.buf.rename, "Rename symbol")
-    map({ "n", "x" }, "<leader>la", vim.lsp.buf.code_action, "Code actions")
+    map({ "n", "x" }, "<leader>la", fzf_lsp("lsp_code_actions", { silent = true }), "Code actions")
     map("n", "<leader>lf", function()
       local clients = vim.lsp.get_clients({ bufnr = bufnr })
       for _, client in ipairs(clients) do
@@ -72,7 +81,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
     -- Diagnostics
     map("n", "[d", vim.diagnostic.goto_prev, "Previous diagnostic")
     map("n", "]d", vim.diagnostic.goto_next, "Next diagnostic")
-    map("n", "<leader>lS", builtin.lsp_workspace_symbols, "Workspace symbols")
+    map("n", "<leader>lS", fzf_lsp("lsp_live_workspace_symbols"), "Workspace symbols")
 
     if vim.lsp.inlay_hint then
       vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
@@ -84,31 +93,89 @@ vim.api.nvim_create_autocmd("LspAttach", {
   end,
 })
 
--- Capabilities (extend with completion if available)
 local capabilities = vim.lsp.protocol.make_client_capabilities()
-local ok_cmp, cmp_lsp = pcall(require, "cmp_nvim_lsp")
-if ok_cmp then
-  capabilities = cmp_lsp.default_capabilities(capabilities)
+local ok_blink, blink = pcall(require, "blink.cmp")
+if ok_blink then
+  capabilities = blink.get_lsp_capabilities(capabilities)
 end
 
 vim.lsp.config("*", {
   capabilities = capabilities,
 })
 
+vim.lsp.config("rust_analyzer", vim.tbl_deep_extend("force", vim.lsp.config.rust_analyzer or {}, {
+  settings = {
+    ["rust-analyzer"] = {
+      cargo = {
+        allTargets = false,
+      },
+      check = {
+        allTargets = false,
+      },
+    },
+  },
+}))
+
+local python_root_markers = {
+  ".venv",
+  "uv.lock",
+  "pyproject.toml",
+  "pyrightconfig.json",
+  "setup.py",
+  "setup.cfg",
+  "requirements.txt",
+  "Pipfile",
+  ".git",
+}
+
+local function has_marker(dir, markers)
+  for _, marker in ipairs(markers) do
+    if vim.uv.fs_stat(vim.fs.joinpath(dir, marker)) then
+      return true
+    end
+  end
+  return false
+end
+
+local function nearest_marker_dir(path, markers)
+  local stat = vim.uv.fs_stat(path)
+  local dir = stat and stat.type == "directory" and path or vim.fs.dirname(path)
+
+  while dir and dir ~= "" do
+    if has_marker(dir, markers) then
+      return dir
+    end
+
+    local parent = vim.fs.dirname(dir)
+    if not parent or parent == dir then
+      return nil
+    end
+    dir = parent
+  end
+end
+
+local function nearest_venv(path)
+  local root = nearest_marker_dir(path, { ".venv" })
+  if not root then
+    return nil
+  end
+
+  local python = vim.fs.joinpath(root, ".venv", "bin", "python")
+  if vim.fn.executable(python) ~= 1 then
+    return nil
+  end
+
+  return {
+    python = python,
+    venv = ".venv",
+    venv_path = root,
+  }
+end
+
 vim.lsp.config("pyright", {
   root_dir = function(bufnr, on_dir)
     local fname = vim.api.nvim_buf_get_name(bufnr)
-
-    local root = vim.fs.root(fname, {
-      "pyproject.toml",
-      "pyrightconfig.json",
-      "setup.py",
-      "setup.cfg",
-      "requirements.txt",
-      "Pipfile",
-    }) or vim.fs.root(fname, { ".git" })
-
-    vim.notify("pyright root: " .. tostring(root))
+    local root = nearest_marker_dir(fname, python_root_markers)
 
     if root then
       on_dir(root)
@@ -124,11 +191,11 @@ vim.lsp.config("pyright", {
       return
     end
 
-    local python = root .. "/.venv/bin/python"
-    vim.notify("pyright python: " .. python)
-
-    if vim.fn.executable(python) == 1 then
-      config.settings.python.pythonPath = python
+    local venv = nearest_venv(root)
+    if venv then
+      config.settings.python.pythonPath = venv.python
+      config.settings.python.venv = venv.venv
+      config.settings.python.venvPath = venv.venv_path
     end
   end,
 
@@ -138,35 +205,6 @@ vim.lsp.config("pyright", {
         autoSearchPaths = true,
         diagnosticMode = "openFilesOnly",
         useLibraryCodeForTypes = true,
-      },
-    },
-  },
-})
-
-vim.lsp.config("rust_analyzer", {
-  capabilities = capabilities,
-  cmd = { "rustup", "run", "stable", "rust-analyzer" },
-  settings = {
-    ["rust-analyzer"] = {
-      completion = {
-        autoimport = {
-          enable = true,
-        },
-        callable = {
-          snippets = "fill_arguments",
-        },
-        fullFunctionSignatures = {
-          enable = true,
-        },
-        postfix = {
-          enable = true,
-        },
-        termSearch = {
-          enable = true,
-        },
-      },
-      check = {
-        command = "clippy",
       },
     },
   },
@@ -193,10 +231,8 @@ vim.lsp.config("texlab", {
 vim.lsp.enable({
   "pyright",
   "rust_analyzer",
-  "clangd",
   "zls",
   "gopls",
-  "jdtls",
   "texlab",
 })
 
