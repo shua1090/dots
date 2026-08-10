@@ -49,6 +49,9 @@ keybind = ctrl+n=new_window
 # Kitty's new_window_with_cwd is closest to a Ghostty split.
 keybind = ctrl+shift+enter=new_split:right
 
+keybind = alt+backspace=text:\x1b\x7f
+keybind = shift+enter=text:\n
+
 # kitty-scrollback.nvim depends on kitty kittens and remote control.
 # These are the closest Ghostty built-ins, but they do not open the
 # scrollback through kitty-scrollback.nvim.

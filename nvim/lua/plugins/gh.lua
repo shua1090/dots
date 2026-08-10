@@ -68,11 +68,12 @@ return {
     end
 
     local function open_file_under_cursor()
-      local lnum = vim.fn.line(".")
-      if lnum <= 3 then return end
+      local tree = require("config.gh_review_tree")
+      if tree.toggle_directory_under_cursor() then
+        return
+      end
 
-      local files = require("gh_review.state").get_changed_files()
-      local file = files[lnum - 3]
+      local file = tree.file_under_cursor()
       if not file or not file.path then return end
 
       local state = require("gh_review.state")
@@ -97,13 +98,24 @@ return {
       vim.defer_fn(arrange_windows, 100)
     end
 
+    require("config.gh_review_tree").patch_plugin()
+
     vim.api.nvim_create_autocmd("FileType", {
       group = group,
       pattern = "gh-review-files",
       callback = function(args)
         vim.bo[args.buf].buflisted = false
         vim.schedule(function()
+          local tree = require("config.gh_review_tree")
           vim.keymap.set("n", "<CR>", open_file_under_cursor, { buffer = args.buf, silent = true, desc = "Open diff" })
+          vim.keymap.set("n", "<Space>", tree.toggle_checked_under_cursor, { buffer = args.buf, silent = true, desc = "Toggle file reviewed" })
+          vim.keymap.set("n", "o", tree.toggle_directory_under_cursor, { buffer = args.buf, silent = true, desc = "Toggle folder" })
+          vim.keymap.set("n", "za", tree.toggle_directory_under_cursor, { buffer = args.buf, silent = true, desc = "Toggle folder" })
+          vim.keymap.set("n", "h", tree.collapse_under_cursor, { buffer = args.buf, silent = true, desc = "Collapse folder" })
+          vim.keymap.set("n", "l", function()
+            tree.expand_or_open_under_cursor(open_file_under_cursor)
+          end, { buffer = args.buf, silent = true, desc = "Expand folder or open diff" })
+          tree.render()
           arrange_windows()
         end)
       end,
