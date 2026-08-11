@@ -116,6 +116,16 @@ vim.lsp.config("rust_analyzer", vim.tbl_deep_extend("force", vim.lsp.config.rust
   },
 }))
 
+vim.lsp.config("clangd", {
+  cmd = {
+    "clangd",
+    "--background-index",
+    "--clang-tidy",
+    "--completion-style=detailed",
+    "--header-insertion=iwyu",
+  },
+})
+
 local python_root_markers = {
   ".venv",
   "uv.lock",
@@ -229,24 +239,10 @@ vim.lsp.config("texlab", {
 })
 
 vim.lsp.enable({
+  "clangd",
   "pyright",
   "rust_analyzer",
   "zls",
   "gopls",
   "texlab",
 })
-
---
--- local lspconfig = require("lspconfig")
---
--- lspconfig.clangd.setup({
---   capabilities = capabilities,
---   cmd = {
---       "clangd",
---       "--background-index",
---       "--clang-tidy",
---       "--completion-style=detailed",
---       "--query-driver=/home/shynn/.platformio/packages/**/bin/*",
---     }
---
--- })
