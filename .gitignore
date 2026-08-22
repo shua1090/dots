@@ -1,0 +1,4 @@
+# This repository intentionally installs a personal cross-agent skill package.
+# Override the user's global rule that ignores project-local agent configuration.
+!agents/.agents/
+!agents/.agents/**

@@ -13,6 +13,13 @@ require("gitsigns").setup({
       vim.keymap.set(mode, lhs, rhs, { buffer = bufnr, desc = desc })
     end
 
+    map("n", "]h", function()
+      gs.nav_hunk("next")
+    end, "Next git hunk")
+    map("n", "[h", function()
+      gs.nav_hunk("prev")
+    end, "Previous git hunk")
+
     map("n", "<leader>gs", gs.stage_hunk, "Git stage hunk")
     map("v", "<leader>gs", function()
       gs.stage_hunk({ vim.fn.line("."), vim.fn.line("v") })

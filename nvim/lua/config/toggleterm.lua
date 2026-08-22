@@ -88,12 +88,20 @@ local function focus_origin_window()
 end
 
 local function toggle_bottom()
-  vim.cmd("1ToggleTerm direction=horizontal")
+  local count = vim.v.count > 0 and vim.v.count or nil
+  toggleterm.toggle(count, nil, nil, "horizontal")
   vim.schedule(function()
     if vim.bo.buftype == "terminal" then
       vim.cmd("startinsert")
     end
   end)
+end
+
+local function new_bottom()
+  Terminal:new({
+    direction = "horizontal",
+    close_on_exit = false,
+  }):open()
 end
 
 local function toggle_float()
@@ -130,12 +138,11 @@ local function toggle_ai(name)
 end
 
 vim.keymap.set("n", "<C-\\>", toggle_bottom, { desc = "Toggle bottom terminal" })
-vim.keymap.set("t", "<C-\\>", [[<C-\><C-n><Cmd>1ToggleTerm direction=horizontal<CR>]], { desc = "Toggle bottom terminal" })
 
 vim.keymap.set("n", "<C-`>", toggle_bottom, { desc = "Toggle bottom terminal" })
-vim.keymap.set("t", "<C-`>", [[<C-\><C-n><Cmd>1ToggleTerm direction=horizontal<CR>]], { desc = "Toggle bottom terminal" })
+vim.keymap.set("t", "<C-`>", [[<C-\><C-n><Cmd>ToggleTerm<CR>]], { desc = "Toggle bottom terminal" })
 vim.keymap.set("n", "<C-~>", toggle_bottom, { desc = "Toggle bottom terminal" })
-vim.keymap.set("t", "<C-~>", [[<C-\><C-n><Cmd>1ToggleTerm direction=horizontal<CR>]], { desc = "Toggle bottom terminal" })
+vim.keymap.set("t", "<C-~>", [[<C-\><C-n><Cmd>ToggleTerm<CR>]], { desc = "Toggle bottom terminal" })
 
 vim.keymap.set("n", "<leader><CR>", toggle_float, { desc = "Toggle floating terminal" })
 vim.keymap.set("t", "<leader><CR>", [[<C-\><C-n><Cmd>99ToggleTerm direction=float<CR>]], { desc = "Toggle floating terminal" })
@@ -145,8 +152,9 @@ vim.keymap.set("n", "<leader>Tf", function()
   toggle_float()
 end, { desc = "Toggle floating terminal" })
 vim.keymap.set("n", "<leader>Tb", toggle_bottom, { desc = "Toggle bottom terminal" })
-vim.keymap.set("n", "<leader>Tn", "<Cmd>TermNew direction=horizontal<CR>", { desc = "New bottom terminal" })
+vim.keymap.set("n", "<leader>Tn", new_bottom, { desc = "New bottom terminal" })
 vim.keymap.set("n", "<leader>Ts", "<Cmd>TermSelect<CR>", { desc = "Select terminal" })
+vim.keymap.set("n", "<leader>Tr", "<Cmd>ToggleTermSetName<CR>", { desc = "Rename terminal" })
 
 vim.keymap.set("n", "<leader>ac", function()
   toggle_ai("codex")

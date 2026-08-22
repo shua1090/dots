@@ -35,6 +35,7 @@ stow_package_with_backups() {
 mkdir -p "$HOME/.config"
 stow -t "$HOME/.config" starship
 stow -t "$HOME" gitconfig
+stow_package_with_backups agents "$HOME"
 # sudo stow -t / greetd
 
 # stow -t ~ gitconfig vimrc waybar starship
@@ -45,10 +46,12 @@ stow -t "$HOME/.config/nvim" nvim
 
 if is_macos; then
   stow_package_with_backups omniwm "$HOME/.config/omniwm"
+  stow_package_with_backups paneru "$HOME/.config/paneru"
   stow_package_with_backups sketchybar "$HOME/.config/sketchybar"
 fi
 
 cp .zshrc "$HOME/.zshrc"
+python3 "$HOME/.agents/skills/project-memory/scripts/install_factory_hooks.py"
 # stow -t ~ .zshrc
 # stow -t ~ wofi wlogout wallpapers swaync
 

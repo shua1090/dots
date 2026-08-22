@@ -1,52 +1,38 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
-. "$(dirname "$0")/helpers.sh"
+source "$(dirname "$0")/helpers.sh"
 
-if [ "${1:-}" = "settings" ]; then
-  open_settings "x-apple.systempreferences:com.apple.Sound-Settings.extension"
-  exit 0
+if [[ "${1:-}" == click ]]; then
+  if [[ "${BUTTON:-left}" == right ]]; then
+    open_settings "x-apple.systempreferences:com.apple.Sound-Settings.extension"
+    exit 0
+  fi
+  /usr/bin/osascript -e 'set volume output muted not (output muted of (get volume settings))' \
+    >/dev/null 2>&1 || true
 fi
 
 volume="${INFO:-}"
+[[ "$volume" =~ ^[0-9]+$ ]] \
+  || volume="$(/usr/bin/osascript -e 'output volume of (get volume settings)' 2>/dev/null || true)"
+muted="$(/usr/bin/osascript -e 'output muted of (get volume settings)' 2>/dev/null || true)"
 
-if [ -z "$volume" ]; then
-  volume="$(osascript -e 'output volume of (get volume settings)' 2>/dev/null || true)"
+if [[ "$muted" == true ]] || [[ "$volume" == 0 ]]; then
+  icon=󰖁
+  color="$MUTED"
+elif (( volume < 30 )); then
+  icon=󰕿
+  color="$MAGENTA"
+elif (( volume < 60 )); then
+  icon=󰖀
+  color="$MAGENTA"
+else
+  icon=󰕾
+  color="$MAGENTA"
 fi
 
-case "$volume" in
-  ""|*[!0-9]*)
-    icon=󰖁
-    label="--"
-    color="$MUTED"
-    ;;
-  0)
-    icon=󰖁
-    label="0%"
-    color="$MUTED"
-    ;;
-  [1-9]|[1-2][0-9])
-    icon=󰕿
-    label="${volume}%"
-    color="$SUBTEXT"
-    ;;
-  [3-5][0-9])
-    icon=󰖀
-    label="${volume}%"
-    color="$TEXT"
-    ;;
-  *)
-    icon=󰕾
-    label="${volume}%"
-    color="$TEXT"
-    ;;
-esac
-
+[[ "$volume" =~ ^[0-9]+$ ]] || volume="--"
 sketchybar --set "${NAME:-volume}" \
   icon="$icon" \
   icon.color="$color" \
-  label="$label" \
-  label.color="$SUBTEXT" \
-  --set volume.popup.status \
-    icon="$icon" \
-    icon.color="$color" \
-    label="Volume $label" >/dev/null 2>&1 || true
+  label="${volume}%" \
+  label.color="$FG"

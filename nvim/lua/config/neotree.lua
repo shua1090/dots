@@ -86,6 +86,33 @@ local function set_project_root_from_node(state)
   require("neo-tree.sources.filesystem.commands").set_root(state)
 end
 
+local function copy_node_path(state, absolute)
+  local node = state.tree:get_node()
+  if not node then
+    return
+  end
+
+  local path = node.path or node:get_id()
+  if not path or path == "" then
+    return
+  end
+
+  if not absolute then
+    path = vim.fs.relpath(vim.uv.cwd(), path) or path
+  end
+
+  vim.fn.setreg("+", path)
+  vim.notify("Copied: " .. path, vim.log.levels.INFO, { title = "Neo-tree" })
+end
+
+local function copy_relative_path(state)
+  copy_node_path(state, false)
+end
+
+local function copy_absolute_path(state)
+  copy_node_path(state, true)
+end
+
 local function sidebar_width()
   return math.min(46, math.max(32, math.floor(vim.o.columns * 0.24)))
 end
@@ -174,6 +201,8 @@ require("neo-tree").setup({
     mappings = {
       ["["] = "prev_source",
       ["]"] = "next_source",
+      ["gy"] = { copy_relative_path, desc = "Copy relative path" },
+      ["gY"] = { copy_absolute_path, desc = "Copy absolute path" },
       ["<space>"] = "none", -- avoid conflicts
     },
   },

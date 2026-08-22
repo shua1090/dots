@@ -1,0 +1,4 @@
+interface:
+  display_name: "Project Memory"
+  short_description: "Recall and preserve durable project knowledge"
+  default_prompt: "Use $project-memory to recall relevant prior decisions, gotchas, and investigations for the current repository."
