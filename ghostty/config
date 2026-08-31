@@ -57,3 +57,5 @@ keybind = shift+enter=text:\n
 # scrollback through kitty-scrollback.nvim.
 keybind = ctrl+shift+h=write_scrollback_file:open
 keybind = ctrl+shift+g=write_screen_file:open
+
+shell-integration-features = ssh-env,ssh-terminfo
