@@ -54,6 +54,8 @@ vim.api.nvim_create_autocmd("LspAttach", {
     map("n", "<leader>lD", vim.lsp.buf.declaration, "Go to declaration")
     map("n", "<leader>li", fzf_lsp("lsp_implementations", { jump1 = true, ignore_current_line = true }), "Go to implementation")
     map("n", "<leader>lr", fzf_lsp("lsp_references", { jump1 = true, ignore_current_line = true }), "Find references")
+    map("n", "<leader>lci", fzf_lsp("lsp_incoming_calls"), "Incoming calls")
+    map("n", "<leader>lco", fzf_lsp("lsp_outgoing_calls"), "Outgoing calls")
 
     -- Info & actions
     map("n", "K", vim.lsp.buf.hover, "Hover documentation")
@@ -115,6 +117,16 @@ vim.lsp.config("rust_analyzer", vim.tbl_deep_extend("force", vim.lsp.config.rust
     },
   },
 }))
+
+vim.lsp.config("clangd", {
+  cmd = {
+    "clangd",
+    "--background-index",
+    "--clang-tidy",
+    "--completion-style=detailed",
+    "--header-insertion=iwyu",
+  },
+})
 
 local python_root_markers = {
   ".venv",
@@ -229,24 +241,10 @@ vim.lsp.config("texlab", {
 })
 
 vim.lsp.enable({
+  "clangd",
   "pyright",
   "rust_analyzer",
   "zls",
   "gopls",
   "texlab",
 })
-
---
--- local lspconfig = require("lspconfig")
---
--- lspconfig.clangd.setup({
---   capabilities = capabilities,
---   cmd = {
---       "clangd",
---       "--background-index",
---       "--clang-tidy",
---       "--completion-style=detailed",
---       "--query-driver=/home/shynn/.platformio/packages/**/bin/*",
---     }
---
--- })

@@ -3,6 +3,10 @@ AGENTS.md
 MEMORY.md
 CLAUDE.md
 GEMINI.md
+TODO.md
+TASK.md
+REVIEW.md
 .cursor/
 .cursorrules
 .cursorignore
+.agents/

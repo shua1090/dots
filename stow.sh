@@ -37,6 +37,7 @@ stow_package_with_backups() {
 }
 
 stow -t "$HOME" gitconfig vimrc waybar starship
+stow_package_with_backups agents "$HOME"
 mkdir -p "$HOME/.config/hypr"
 stow -t "$HOME/.config/hypr" hypr
 mkdir -p "$HOME/.config/niri"
@@ -46,8 +47,11 @@ stow -t "$HOME" wofi wlogout wallpapers swaync
 
 if is_macos; then
   stow_package_with_backups omniwm "$HOME/.config/omniwm"
+  stow_package_with_backups paneru "$HOME/.config/paneru"
   stow_package_with_backups sketchybar "$HOME/.config/sketchybar"
 fi
 
 mkdir -p "$HOME/bin"
 cp dbox.sh "$HOME/bin/dbox"
+
+python3 "$HOME/.agents/skills/project-memory/scripts/install_factory_hooks.py"

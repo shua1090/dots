@@ -1,18 +1,18 @@
 #!/usr/bin/env sh
 
-export BAR_COLOR=0xb8131519
-export GROUP_BG=0x30242830
-export GROUP_BG_STRONG=0x46303742
-export ITEM_BG=0x00000000
-export ITEM_BG_SOFT=0x263a3f4b
-export ITEM_BG_STRONG=0x66404a5a
-export ACTIVE_BG=0xffe6b85c
-export ACTIVE_FG=0xff17181c
-export BORDER=0x20ffffff
-export TEXT=0xfff6f0e6
-export SUBTEXT=0xffc4beb2
-export MUTED=0xff746f68
-export GREEN=0xff8fd694
-export BLUE=0xff83c5e6
-export RED=0xffff7f9f
-export AMBER=0xfff0b45a
+# One Dark, expressed as SketchyBar ARGB colors.
+export BAR_BG=0xf021252b
+export BG=0xff282c34
+export SURFACE=0xff2c313c
+export SURFACE_HOVER=0xff353b45
+export BORDER=0xff3e4451
+
+export FG=0xffabb2bf
+export MUTED=0xff5c6370
+export RED=0xffe06c75
+export GREEN=0xff98c379
+export YELLOW=0xffe5c07b
+export BLUE=0xff61afef
+export MAGENTA=0xffc678dd
+export CYAN=0xff56b6c2
+export ORANGE=0xffd19a66

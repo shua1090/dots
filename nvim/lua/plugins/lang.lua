@@ -68,16 +68,6 @@ return {
       },
     },
     config = function(_, opts)
-      opts.server = vim.tbl_deep_extend("force", opts.server or {}, {
-        capabilities = capabilities(),
-        cmd = {
-          "clangd",
-          "--background-index",
-          "--clang-tidy",
-          "--completion-style=detailed",
-          "--header-insertion=iwyu",
-        },
-      })
       require("clangd_extensions").setup(opts)
     end,
   },

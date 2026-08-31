@@ -30,7 +30,7 @@ fi
 
 ZSH_PLUGIN_DIR="$HOME/.zsh/plugins"
 ZSH_CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/zsh"
-ZSH_COMPLETION_STYLE="${ZSH_COMPLETION_STYLE:-autocomplete}" # autocomplete|fzf|plain
+ZSH_COMPLETION_STYLE="${ZSH_COMPLETION_STYLE:-fzf}" # autocomplete|fzf|plain
 
 mkdir -p "$ZSH_PLUGIN_DIR" "$ZSH_CACHE_DIR" 2>/dev/null
 if [[ ! -d "$ZSH_CACHE_DIR" || ! -w "$ZSH_CACHE_DIR" ]]; then
@@ -61,8 +61,11 @@ _zsh_clone_plugin() {
   local url="$2"
   local target="$ZSH_PLUGIN_DIR/$name"
 
-  [[ -d "$target/.git" ]] && return 0
-  _zsh_run_with_timeout 20 git clone --depth 1 -- "$url" "$target"
+  if [[ -d "$target/.git" ]]; then
+    _zsh_run_with_timeout 20 git -C "$target" pull --ff-only
+  else
+    _zsh_run_with_timeout 20 git clone --depth 1 -- "$url" "$target"
+  fi
 }
 
 setup_plugins() {
@@ -140,7 +143,6 @@ _zsh_load_completion_plugins() {
   zstyle ':completion:*' use-cache on
   zstyle ':completion:*' cache-path "$ZSH_CACHE_DIR/zcompcache"
   zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=** r:|=**'
-  zstyle ':completion:*' menu select
   zstyle ':completion:*' group-name ''
   zstyle ':completion:*:descriptions' format '%F{yellow}%d%f'
 
@@ -170,12 +172,16 @@ _zsh_load_completion_plugins() {
       (( completion_loaded )) || _zsh_init_compinit
       ;;
     fzf|fzf-tab)
+      zstyle ':completion:*' menu no
+      zstyle ':fzf-tab:*' fzf-flags --height=~60% --layout=reverse --border
+      zstyle ':fzf-tab:*' switch-group '<' '>'
       _zsh_init_compinit
       if ! _zsh_load_antidote_bundle zsh-fzf-tab 'Aloxaf/fzf-tab'; then
         [[ -r "$ZSH_PLUGIN_DIR/fzf-tab/fzf-tab.plugin.zsh" ]] && source "$ZSH_PLUGIN_DIR/fzf-tab/fzf-tab.plugin.zsh"
       fi
       ;;
     plain|none)
+      zstyle ':completion:*' menu select
       _zsh_init_compinit
       ;;
     *)
@@ -333,7 +339,7 @@ fi
 gP() {
   local branch remote_branch remote branch_name
 
-  branch=$(git rev-parse --abbrev-ref HEAD) || return
+  branch=$(git branch --show-current) || return
   remote_branch=$(git rev-parse --abbrev-ref --symbolic-full-name @{u} 2>/dev/null)
 
   if [[ -z "$remote_branch" ]]; then
@@ -353,6 +359,26 @@ gP() {
       print -r -- "$output"
     fi
   } &!
+}
+
+set_upstream() {
+    local branch remote_branch
+    branch=$(git branch --show-current) || return
+
+    if git show-ref --verify --quiet refs/remotes/origin/$branch; then
+        echo "origin/$branch exists, setting"
+        git branch --set-upstream-to=origin/$branch $branch
+    else
+        echo "could not find origin/$branch"    
+    fi
+}
+
+macos_disable_sleep() {
+    sudo pmset -a disablesleep 1
+}
+
+macos_enable_sleep() {
+    sudo pmset -a disablesleep 0
 }
 
 # === AWS ECR + Docker helpers ===

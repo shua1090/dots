@@ -1,6 +1,6 @@
 # Ported from kitty/kitty.conf.
 
-command = /usr/bin/zsh
+command = /bin/zsh
 
 font-family = JetBrainsMono Nerd Font
 font-size = 16
@@ -59,3 +59,7 @@ keybind = ctrl+shift+h=write_scrollback_file:open
 keybind = ctrl+shift+g=write_screen_file:open
 
 shell-integration-features = ssh-env,ssh-terminfo
+# keybind = global:alt+backquote=toggle_quick_terminal
+
+quick-terminal-position = top 
+quick-terminal-size = 100%

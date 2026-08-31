@@ -152,15 +152,15 @@ return {
         fd_opts = "--color=never --type f --hidden --follow --exclude .git",
         rg_opts = "--color=never --files --hidden --follow -g !.git",
         actions = {
-          ["alt-h"] = { actions.toggle_hidden },
-          ["alt-i"] = { actions.toggle_ignore },
+          ["f10"] = { actions.toggle_hidden },
+          ["f11"] = { actions.toggle_ignore },
         },
       },
       grep = {
         rg_opts = "--column --line-number --no-heading --color=always --smart-case --hidden --glob !.git/",
         actions = {
-          ["alt-h"] = { actions.toggle_hidden },
-          ["alt-i"] = { actions.toggle_ignore },
+          ["f10"] = { actions.toggle_hidden },
+          ["f11"] = { actions.toggle_ignore },
         },
       },
       lsp = {
