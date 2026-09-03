@@ -41,6 +41,7 @@ stow_package_with_backups agents "$HOME"
 # stow -t ~ gitconfig vimrc waybar starship
 # stow -t ~/.config/hypr hypr
 stow_package_with_backups ghostty "$HOME/.config/ghostty"
+stow_package_with_backups noctalia "$HOME/.config/noctalia"
 mkdir -p "$HOME/.config/nvim"
 stow -t "$HOME/.config/nvim" nvim
 
