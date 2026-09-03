@@ -51,7 +51,7 @@ if is_macos; then
 fi
 
 cp .zshrc "$HOME/.zshrc"
-python3 "$HOME/.agents/skills/project-memory/scripts/install_factory_hooks.py"
+python3 "$HOME/.agents/skills/project-memory/scripts/install_factory_hooks.py" --adopt-existing
 # stow -t ~ .zshrc
 # stow -t ~ wofi wlogout wallpapers swaync
 

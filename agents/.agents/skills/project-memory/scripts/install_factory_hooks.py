@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Install Factory discovery and context hooks for project-memory."""
+"""Install Factory discovery hooks and links for the shared skill package."""
 
 from __future__ import annotations
 
@@ -8,6 +8,7 @@ import json
 import os
 import shlex
 import sys
+from datetime import datetime
 from pathlib import Path
 
 
@@ -18,20 +19,63 @@ def parser() -> argparse.ArgumentParser:
     result = argparse.ArgumentParser(description=__doc__)
     result.add_argument("--path", type=Path, default=Path("~/.factory/hooks.json").expanduser())
     result.add_argument(
+        "--factory-skills-root",
+        type=Path,
+        default=Path("~/.factory/skills").expanduser(),
+        help="Factory's personal skill directory",
+    )
+    result.add_argument(
+        "--codex-skills-root",
+        type=Path,
+        default=Path("~/.codex/skills").expanduser(),
+        help="Codex's personal skill directory",
+    )
+    result.add_argument(
+        "--canonical-skills-root",
+        type=Path,
+        default=Path("~/.agents/skills").expanduser(),
+        help="Canonical cross-agent skill directory",
+    )
+    # Keep these aliases for callers that used the original project-memory-only
+    # installer. They are resolved into the roots above when supplied.
+    result.add_argument(
         "--factory-skill-path",
         type=Path,
-        default=Path("~/.factory/skills/project-memory").expanduser(),
+        default=None,
     )
     result.add_argument(
         "--canonical-skill-path",
         type=Path,
-        default=Path("~/.agents/skills/project-memory").expanduser(),
+        default=None,
+    )
+    result.add_argument(
+        "--adopt-existing",
+        action="store_true",
+        help="Replace identical existing skill copies with canonical links",
     )
     result.add_argument("--dry-run", action="store_true")
     return result
 
 
-def install_skill_link(source: Path, target: Path, dry_run: bool) -> str:
+def _ignored(path: Path) -> bool:
+    return "__pycache__" in path.parts or path.suffix == ".pyc"
+
+
+def _files(root: Path) -> dict[str, bytes]:
+    result = {}
+    for path in root.rglob("*"):
+        if path.is_file() and not _ignored(path.relative_to(root)):
+            result[str(path.relative_to(root))] = path.read_bytes()
+    return result
+
+
+def identical_skill(source: Path, target: Path) -> bool:
+    return target.is_dir() and _files(source) == _files(target)
+
+
+def install_skill_link(
+    source: Path, target: Path, dry_run: bool, adopt_existing: bool = False
+) -> str:
     source = source.expanduser().absolute()
     target = target.expanduser().absolute()
     if not (source / "SKILL.md").is_file():
@@ -39,21 +83,49 @@ def install_skill_link(source: Path, target: Path, dry_run: bool) -> str:
 
     if target.is_symlink():
         if target.resolve() == source.resolve():
-            return f"Factory skill link already installed at {target}"
+            return f"Skill link already installed at {target}"
         raise ValueError(f"refusing to replace conflicting symlink: {target}")
     if target.exists():
-        raise ValueError(f"refusing to replace existing Factory skill: {target}")
+        if not adopt_existing:
+            return f"Skipped existing Factory skill {target} (use --adopt-existing to link it)"
+        if not identical_skill(source, target):
+            return f"Skipped non-identical Factory skill {target}"
+        backup = target.parent / ".skill-backups" / (
+            f"{target.name}-{datetime.now().strftime('%Y%m%d%H%M%S')}"
+        )
+        if dry_run:
+            return f"Would adopt {target} -> {source} (backup: {backup})"
+        backup.parent.mkdir(parents=True, exist_ok=True)
+        target.rename(backup)
+        target.symlink_to(source, target_is_directory=True)
+        return f"Adopted skill link {target} -> {source} (backup: {backup})"
     if dry_run:
         return f"Would link {target} -> {source}"
 
     target.parent.mkdir(parents=True, exist_ok=True)
     target.symlink_to(source, target_is_directory=True)
-    return f"Linked Factory skill {target} -> {source}"
+    return f"Linked skill {target} -> {source}"
+
+
+def canonical_skills(root: Path) -> list[Path]:
+    if not root.is_dir():
+        raise ValueError(f"canonical skills directory is missing: {root}")
+    return sorted(
+        (path for path in root.iterdir() if path.is_dir() and (path / "SKILL.md").is_file()),
+        key=lambda path: path.name,
+    )
 
 
 def main() -> int:
     args = parser().parse_args()
     path = args.path.expanduser()
+    canonical_root = args.canonical_skills_root.expanduser()
+    factory_root = args.factory_skills_root.expanduser()
+    codex_root = args.codex_skills_root.expanduser()
+    if args.canonical_skill_path is not None:
+        canonical_root = args.canonical_skill_path.expanduser().parent
+    if args.factory_skill_path is not None:
+        factory_root = args.factory_skill_path.expanduser().parent
     if path.exists():
         data = json.loads(path.read_text(encoding="utf-8"))
         if not isinstance(data, dict):
@@ -107,12 +179,28 @@ def main() -> int:
     })
     data["PreToolUse"] = retained_pretool_groups
 
-    link_result = install_skill_link(
-        args.canonical_skill_path, args.factory_skill_path, args.dry_run
-    )
+    links = []
+    for source in canonical_skills(canonical_root):
+        links.append(
+            install_skill_link(
+                source,
+                codex_root / source.name,
+                args.dry_run,
+                args.adopt_existing,
+            )
+        )
+        links.append(
+            install_skill_link(
+                source,
+                factory_root / source.name,
+                args.dry_run,
+                args.adopt_existing,
+            )
+        )
     rendered = json.dumps(data, indent=2) + "\n"
     if args.dry_run:
-        print(link_result, file=sys.stderr)
+        for link in links:
+            print(link, file=sys.stderr)
         print(rendered, end="")
         return 0
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -120,8 +208,9 @@ def main() -> int:
     temporary.write_text(rendered, encoding="utf-8")
     temporary.chmod(0o600)
     temporary.replace(path)
-    print(link_result)
-    print(f"Installed Factory project-memory hooks in {path}")
+    for link in links:
+        print(link)
+    print(f"Installed Factory hooks and skill links in {path}")
     return 0
 
 

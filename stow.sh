@@ -54,4 +54,4 @@ fi
 mkdir -p "$HOME/bin"
 cp dbox.sh "$HOME/bin/dbox"
 
-python3 "$HOME/.agents/skills/project-memory/scripts/install_factory_hooks.py"
+python3 "$HOME/.agents/skills/project-memory/scripts/install_factory_hooks.py" --adopt-existing

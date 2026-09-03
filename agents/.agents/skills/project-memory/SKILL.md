@@ -76,7 +76,7 @@ Install or update user-level hooks with:
 python3 "$HOME/.agents/skills/project-memory/scripts/install_factory_hooks.py"
 ```
 
-The installer links the canonical skill into `~/.factory/skills/project-memory` for Factory versions that do not scan personal `.agents` skills, then merges hooks idempotently into `~/.factory/hooks.json`. It refuses to replace a conflicting skill or symlink. `SessionStart` injects the digest plus a few critical facts. `UserPromptSubmit` searches the current prompt and injects only relevant active matches. Both fail open: memory errors never block Droid. No hook captures conversations automatically.
+The installer links every canonical skill under `~/.agents/skills` into both `~/.codex/skills` and `~/.factory/skills`, then merges these hooks idempotently into `~/.factory/hooks.json`. It refuses conflicting symlinks and non-identical existing skills. `--adopt-existing` converts identical pre-existing copies into links, keeping a backup. `SessionStart` injects the digest plus a few critical facts. `UserPromptSubmit` searches the current prompt and injects only relevant active matches. Both fail open: memory errors never block Droid. No hook captures conversations automatically.
 
 Run the installer with `--dry-run` to inspect the merged JSON first.
 
