@@ -25,8 +25,8 @@ cargo install --locked bat
 echo "installing better git-delta"
 cargo install git-delta
 
-echo "installing octorus/lazygit"
-cargo install octorus
+#echo "installing octorus/lazygit"
+#cargo install octorus
 go install github.com/jesseduffield/lazygit@latest
 
 echo "Keeping NVM and SDKMAN for now; mise is a good future replacement candidate."

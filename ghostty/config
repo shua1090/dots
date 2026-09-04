@@ -63,3 +63,4 @@ shell-integration-features = ssh-env,ssh-terminfo
 
 quick-terminal-position = top 
 quick-terminal-size = 100%
+mouse-scroll-multiplier = precision:5

@@ -389,7 +389,7 @@ binds {
     Mod+Return hotkey-overlay-title="Open a Terminal: ghostty" { spawn "ghostty"; }
     Mod+D hotkey-overlay-title="Noctalia Launcher" { spawn-sh "qs -c noctalia-shell ipc call launcher toggle"; }
     Mod+E { spawn "nautilus"; }
-    Mod+B { spawn "brave-browser"; }
+    Mod+B { spawn "helium"; }
     Mod+P { spawn-sh "qs -c noctalia-shell ipc call sessionMenu toggle"; }
     Mod+N { spawn "swaync-client" "-t" "-sw"; }
     Mod+Shift+W { spawn-sh "qs -c noctalia-shell ipc call wallpaper random"; }
@@ -426,6 +426,9 @@ binds {
     XF86MonBrightnessUp allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "+10%"; }
     XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "10%-"; }
 
+    // Some keyboards emit plain F3/F4 for the display brightness keys.
+    F3 allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "10%-"; }
+    F4 allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "+10%"; }
     // Open/close the Overview: a zoomed-out view of workspaces and windows.
     // You can also move the mouse into the top-left hot corner,
     // or do a four-finger swipe up on a touchpad.

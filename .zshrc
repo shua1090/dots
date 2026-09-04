@@ -509,3 +509,7 @@ setopt INTERACTIVE_COMMENTS
 [[ -o interactive ]] && (( $+commands[atuin] )) && eval "$(atuin init zsh --disable-up-arrow)"
 
 [[ -o interactive ]] && _zsh_load_post_plugins
+
+export NIXPKGS_ALLOW_UNFREE=1
+
+eval "$(direnv hook zsh)"
